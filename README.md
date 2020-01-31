@@ -112,3 +112,8 @@ kubectl port-forward service/vvp-ververica-platform 8080:80
 
 The web user interface is now available under `localhost:8080`. 
 
+
+## About
+
+Ververica Platform is the enterprise stream processing platform by the original creators of Apache Flink. Vist us under
+vererica.com.  
