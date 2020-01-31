@@ -1,7 +1,8 @@
 # Welcome to the Ververica Platform Playground
 
-In this playground, you will install Ververica Platform, integrate it with Minio for Universal Blob Storage and create
-your first Apache Flink application using Ververica Platform.
+In this playground, you will install Ververica Platform, integrate it with Minio for 
+[Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html) and create your first Apache Flink 
+application using Ververica Platform.
 
 ## Setting the Stage
 
@@ -11,7 +12,7 @@ Ververica Platform runs on top of Kubernetes. In order to get started locally we
 other Kubernetes Cluster (1.11+) will do, too. 
  
 Minikube relies on virtualization support by your operating system as well as a hypervisor (e.g. Virtualbox). Please 
-check https://kubernetes.io/docs/tasks/tools/install-minikube/#before-you-begin for details.  
+check [the official installation guide](https://kubernetes.io/docs/tasks/tools/install-minikube/#before-you-begin) for details.  
 
 #### Minikube on Mac OS (homebrew)
 
@@ -28,8 +29,8 @@ choco install kubernetes-cli minikube
 #### Minikube on Linux
 
 There are packages available for most package manager. Please check 
-https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux (Kubernetes CLI) and 
-https://kubernetes.io/docs/tasks/tools/install-minikube/ (Minikube) for details. 
+the [kubectl installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux) as 
+well as the [minikube installation guide](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-minikube) for details. 
 
 #### Spinning up a Kubernetes Cluster
 
@@ -66,10 +67,10 @@ If all pods are ready, you are good to go.
 ### helm
 
 *"Helm helps you manage Kubernetes applications — Helm Charts help you define, install, and upgrade even the most 
-complex Kubernetes application."*
+complex Kubernetes application."* - [helm.sh](https://helm.sh/)
 
-We as well decided to distribute Ververica Platform as a Helm Chart. To  install helm please follow the instructions on  
-https://helm.sh/docs/intro/install/ or use one of the one-liners below.
+We as well decided to distribute Ververica Platform as a Helm Chart. To install helm please follow the instructions on  
+the [official installation guide](https://helm.sh/docs/intro/install/) or use one of the one-liners below.
 
 #### Helm on Mac OS (homebrew)
 
@@ -85,14 +86,14 @@ choco install kubernetes-helm
 
 #### Helm on Linux
 
-As before, there is a package available for most package managers. For details check https://helm.sh/docs/intro/install/ or search 
-your packager manager.
+As before, there is a package available for most package managers. For details check the 
+[official installation guide](https://helm.sh/docs/intro/install/).
 
 #### Verifying Helm Installation
 
-After installation `helm list` should return an empty list (You did not install anything yet.) successfully.  
+After installation `helm list` should return an empty list without any errors.  
 
-## Getting Started with Ververica Platform
+## Installing Ververica Platform
 
 Now, we can install Ververica Platform using `helm`. 
  
@@ -103,17 +104,15 @@ helm install \
   ververica-platform-2.0.3.tgz
 ```
 
-In order to access the web user interface or the REST API, you need to setup a port forward to the Ververica Platform 
-Kubernetes service.
+In order to access the web user interface or the REST API setup a port forward to the Ververica Platform Kubernetes 
+service.
 
 ```
 kubectl port-forward service/vvp-ververica-platform 8080:80
 ```
 
-The web user interface is now available under `localhost:8080`. 
-
+Both interfaces are now available under `localhost:8080`. 
 
 ## About
 
-Ververica Platform is the enterprise stream processing platform by the original creators of Apache Flink. Vist us under
-vererica.com.  
+[Ververica Platform](https://www.ververica.com) is the enterprise stream processing platform by the original creators of [Apache Flink](https://flink.apache.org/). 
