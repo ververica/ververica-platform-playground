@@ -1,6 +1,7 @@
-# Ververica Platform Playground
+# Welcome to the Ververica Platform Playground
 
-Welcome to the Ververica Platform Playground!
+In this playground, you will install Ververica Platform, integrate it with Minio for Universal Blob Storage and create
+your first Apache Flink application using Ververica Platform.
 
 ## Setting the Stage
 
