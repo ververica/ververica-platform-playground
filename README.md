@@ -4,6 +4,15 @@ In this playground, you will install Ververica Platform, integrate it with Minio
 [Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html), and create your first Apache Flink 
 application using Ververica Platform.
 
+* [Setting the Stage](#setting-the-stage)
+  + [Kubernetes](#kubernetes)
+  + [helm](#helm)
+* [Setting Up the Playground](#setting-up-the-playground)
+  + [Anatomy of this Playground](#anatomy-of-this-playground)
+  + [Installing the Components](#installation)
+* [Cleaning Up](#teardown)
+* [About](#about)
+
 ## Setting the Stage
 
 ### Kubernetes
@@ -100,10 +109,11 @@ After installation `helm list` should return an empty list without any errors.
 
 ### Anatomy of this Playground
 
-For this playground, you will create three Kubernetes namespaces. `vvp` will host the control plane of Ververica 
-Platform, while the actual Apache Flink deployments will run in the `vvp-jobs` namespace. Additionally, we will setup 
-[MinIO](https://min.io/) in a separate namespace, which is used for artifact storage as well as Apache Flink checkpoints 
-& savepoints ([Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html)). 
+For this playground, you will create three Kubernetes namespaces: `vvp`, `vvp-jobs` and `minio`. `vvp` will host the 
+control plane of Ververica  Platform while the actual Apache Flink deployments will run in the `vvp-jobs` namespace. 
+Additionally, we will setup [MinIO](https://min.io/) in a separate namespace, which is used for artifact storage as well 
+as Apache Flink checkpoints & savepoints 
+([Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html)). 
 
 ```
 +--------------------------------+           +--------------------------------+                     
@@ -131,23 +141,25 @@ Platform, while the actual Apache Flink deployments will run in the `vvp-jobs` n
                                              +--------------------------------+   
 ```
 
-### Installation
+### Installing the Components
 
-## TL;DR:
+#### TL;DR:
 
-To run all of the installation steps outline below in order run
+You can skip all of the installation steps outlined below by running 
 
 ```
 ./setup.sh
 ```
 
-## Kubernetes Namespaces
+#### Kubernetes Namespaces
+
+Before installing any of the components you need the underlying Kubernetes namespaces.
 
 ```
 kubectl apply -f resources/namespaces.yaml
 ```
 
-## Installation of MinIO
+#### MinIO
 
 First, you install MinIO using `helm`. For MinIO, you can use the official Helm chart, for which you might first need to 
 add the `stable` Helm repository.
@@ -157,7 +169,7 @@ add the `stable` Helm repository.
 helm install minio stable/minio --namespace minio --values minio/values.yaml
 ```
 
-## Installation of Ververica Platform 
+#### Ververica Platform 
 
 Second, you can install Ververica Platform again using `helm`. 
  
@@ -174,7 +186,7 @@ kubectl port-forward --namespace vvp service/vvp-ververica-platform 8080:80
 
 Both interfaces are now available under `localhost:8080`. 
 
-## Teardown
+## Cleaning Up
 
 ```
 kubectl delete namespace minio vvp vvp-jobs
