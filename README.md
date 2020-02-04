@@ -72,6 +72,9 @@ complex Kubernetes application."* - [helm.sh](https://helm.sh/)
 We as well decided to distribute Ververica Platform as a Helm Chart. To install helm please follow the instructions on  
 the [official installation guide](https://helm.sh/docs/intro/install/) or use one of the one-liners below.
 
+**Note:** This playground assumes Helm 3.x. When using Helm 2.x, you need to setup Tiller in your Kubernetes cluster
+and commands will be slightly different.
+
 #### Helm on Mac OS (homebrew)
 
 ```
@@ -86,32 +89,96 @@ choco install kubernetes-helm
 
 #### Helm on Linux
 
-As before, there is a package available for most package managers. For details check the 
+As before, there is a package available for most distros and package managers. For details check the 
 [official installation guide](https://helm.sh/docs/intro/install/).
 
 #### Verifying Helm Installation
 
 After installation `helm list` should return an empty list without any errors.  
 
-## Installing Ververica Platform
+## Setting Up the Playground
 
-Now, we can install Ververica Platform using `helm`. 
+### Anatomy of this Playground
+
+For this playground, you will create three Kubernetes namespaces. `vvp` will host the control plane of Ververica 
+Platform, while the actual Apache Flink deployments will run in the `vvp-jobs` namespace. Additionally, we will setup 
+[MinIO](https://min.io/) in a separate namespace, which is used for artifact storage as well as Apache Flink checkpoints 
+& savepoints ([Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html)). 
+
+```
++--------------------------------+           +--------------------------------+                     
+|        namespace: minio        |           |         namespace: vvp         |                     
+|                                |           |                                |                     
+|        +--------------+        | Artifacts |        +--------------+        |                     
+|        |              |        |-----------|        |              |        |                     
+|        |    Minio     |        |           |        |  Ververica   |        |                     
+|        |              |        |           |        |  Platform    |        |                     
+|        +--------------+        |           |        |              |        |                     
+|                                |           |        +--------------+        |                     
++--------------------------------+           +--------------------------------+                     
+                   \--                                        |                                     
+                      \--                                     |Management of Apache Flink Deployment
+                         \--                                  |                                     
+                            \-               +--------------------------------+                     
+                              \--            |      namespace: vvp-jobs       |                     
+        Checkpoints/Savepoints   \--         |                                |                     
+                                    \--      |        +--------------+        |                     
+                                       \--   |        |              |        |                     
+                                          \- |        | Apache Flink |        |                     
+                                             |        |   Clusters   |        |                     
+                                             |        |              |        |                     
+                                             |        +--------------+        |                     
+                                             +--------------------------------+   
+```
+
+### Installation
+
+## TL;DR:
+
+To run all of the installation steps outline below in order run
+
+```
+./setup.sh
+```
+
+## Kubernetes Namespaces
+
+```
+kubectl apply -f resources/namespaces.yaml
+```
+
+## Installation of MinIO
+
+First, you install MinIO using `helm`. For MinIO, you can use the official Helm chart, for which you might first need to 
+add the `stable` Helm repository.
+
+```
+# helm repo add stable http://storage.googleapis.com/kubernetes-charts
+helm install minio stable/minio --namespace minio --values minio/values.yaml
+```
+
+## Installation of Ververica Platform 
+
+Second, you can install Ververica Platform again using `helm`. 
  
 ```
-helm install \
-  --name vvp \
-  --values ververica-platform/values.yaml \
-  ververica-platform-2.0.3.tgz
+helm install vvp ververica-platform-2.0.4.tgz --namespace vvp --values ververica-platform/values.yaml
 ```
 
 In order to access the web user interface or the REST API setup a port forward to the Ververica Platform Kubernetes 
 service.
 
 ```
-kubectl port-forward service/vvp-ververica-platform 8080:80
+kubectl port-forward --namespace vvp service/vvp-ververica-platform 8080:80
 ```
 
 Both interfaces are now available under `localhost:8080`. 
+
+## Teardown
+
+```
+kubectl delete namespace minio vvp vvp-jobs
+```
 
 ## About
 

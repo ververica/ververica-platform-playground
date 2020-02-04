@@ -1,0 +1,5 @@
+accessKey: admin
+secretKey: password
+defaultBucket:
+  enabled: true
+  name: vvp
