@@ -1,7 +1,7 @@
 # Welcome to the Ververica Platform Playground
 
 In this playground, you will install Ververica Platform, integrate it with Minio for 
-[Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html) and create your first Apache Flink 
+[Universal Blob Storage](https://docs.ververica.com/administration/blob_storage.html), and create your first Apache Flink 
 application using Ververica Platform.
 
 ## Setting the Stage
@@ -28,7 +28,7 @@ choco install kubernetes-cli minikube
 
 #### Minikube on Linux
 
-There are packages available for most package manager. Please check 
+There are packages available for most distros and package managers. Please check 
 the [kubectl installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux) as 
 well as the [minikube installation guide](https://kubernetes.io/docs/tasks/tools/install-minikube/#install-minikube) for details. 
 
