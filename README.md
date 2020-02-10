@@ -1,4 +1,4 @@
-<img alt="Ververica Platform" src="https://github.com/knaufk/ververica-platform-playground/raw/VVP-976/vvp-logo.png" width="300px" />
+<img alt="Ververica Platform" src="vvp-logo.png" width="300px" />
 
 # Welcome to the Ververica Platform Playground
 
