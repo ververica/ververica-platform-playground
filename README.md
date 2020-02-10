@@ -1,3 +1,5 @@
+<img alt="Ververica Platform" src="vvp-logo.png" width="300px" />
+
 # Welcome to the Ververica Platform Playground
 
 In this playground, you will install Ververica Platform, integrate it with Minio for 
