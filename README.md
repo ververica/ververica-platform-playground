@@ -2,9 +2,9 @@
 
 # Welcome to the Ververica Platform Playground
 
-This playground provides a hands-on introduction to Ververica Platform based on minimal prerequisites. 
+This playground provides a hands-on introduction to Ververica Platform with minimal prerequisites. 
 
-Please check out the [corresponding getting started guide](https://docs.ververica.com/getting_started/index.html) in the [Ververica Platform documentation](https:://docs.ververica.com).  
+Please check out the [corresponding getting started guide](https://docs.ververica.com/getting_started/index.html) in the [Ververica Platform documentation](https://docs.ververica.com).  
 
 ## About
 
