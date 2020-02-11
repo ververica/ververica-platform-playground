@@ -1,0 +1,8 @@
+kind: DeploymentTarget
+apiVersion: v1
+metadata:
+  name: vvp-jobs
+  namespace: default
+spec:
+  kubernetes:
+    namespace: vvp-jobs

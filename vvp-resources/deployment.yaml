@@ -1,0 +1,16 @@
+kind: Deployment
+apiVersion: v1
+metadata:
+  name: TopSpeedWindowing
+  namespace: default
+  annotations:
+    license/testing: 'true'
+spec:
+  deploymentTargetId: <replace_me>
+  template:
+    spec:
+      artifact:
+        kind: JAR
+        jarUri: >-
+          https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming_2.12/1.9.2/flink-examples-streaming_2.12-1.9.2-TopSpeedWindowing.jar
+      parallelism: 1
