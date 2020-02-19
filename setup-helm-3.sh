@@ -9,4 +9,5 @@ kubectl apply -f resources/namespaces.yaml
 $HELM install minio stable/minio --namespace minio --values minio/values.yaml
 
 # Ververica Platform
-$HELM install vvp ververica-platform-2.0.4.tgz --namespace vvp --values ververica-platform/values.yaml
+$HELM repo add ververica https://charts.ververica.com
+$HELM install vvp ververica/ververica-platform --namespace vvp --values ververica-platform/values.yaml
