@@ -1,10 +1,36 @@
-### Configure Minio for Universal Blob Storage
 vvp:
+
+  ### Configure VVP to use a local SQLite Database
+  persistence:
+    type: local
+
+  ### Configure Minio for Universal Blob Storage
   blobStorage:
     baseUri: s3://vvp
 
     s3:
       endpoint: http://minio.minio.svc.cluster.local:9000
+
+  ### Configure some global defaults for Deployments in this instance of Ververica Platform
+  globalDeploymentDefaults: |
+    spec:
+      template:
+        spec:
+          state: running
+          resources:
+            jobmanager:
+              cpu: 0.5
+              memory: 500M
+            taskmanager:
+              cpu: 0.5
+              memory: 500M
+          flinkConfiguration:
+            state.backend: filesystem
+            high-availability: vvp-kubernetes
+
+  ### Provide Ververica Platform License (free trial: www.ververica.com/enterprise-trial)
+  license:
+    data: {} # paste license here
 
 blobStorageCredentials:
   s3:
