@@ -14,9 +14,9 @@ vvp:
   ### Configure some global defaults for Deployments in this instance of Ververica Platform
   globalDeploymentDefaults: |
     spec:
+      state: RUNNING
       template:
         spec:
-          state: running
           resources:
             jobmanager:
               cpu: 0.5
