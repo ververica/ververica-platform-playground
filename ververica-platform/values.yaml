@@ -28,10 +28,6 @@ vvp:
             state.backend: filesystem
             high-availability: vvp-kubernetes
 
-  ### Provide Ververica Platform License (free trial: www.ververica.com/enterprise-trial)
-  license:
-    data: {} # paste license here
-
 blobStorageCredentials:
   s3:
     accessKeyId: admin
