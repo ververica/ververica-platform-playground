@@ -6,6 +6,15 @@ set -o pipefail
 
 HELM=${HELM:-helm}
 HELM_VERSION=
+VVP_CHART="ververica/ververica-platform"
+
+
+usage() {
+    echo -e "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm. \n"
+    echo "./setup.sh"
+    echo -e "\t -h --help"
+    echo -e "\t -e --edition [community|stream] (default: commmunity)"
+}
 
 detect_helm_version() {
   local helm_version_string
@@ -46,19 +55,102 @@ install_minio() {
 }
 
 install_vvp() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install ververica/ververica-platform \
-      --name vvp \
-      --namespace vvp \
-      --values values-vvp.yaml \
-      --values values-license.yaml
+
+  $HELM repo add ververica https://charts.ververica.com
+
+  if [ "$vvp_edition" == "stream" ]; then
+    if [ "$HELM_VERSION" -eq 2 ]; then
+      $HELM install $VVP_CHART \
+       --name vvp \
+       --namespace vvp \
+       --values ververica-platform/values.yaml \
+       --values ververica-platform/values-license.yaml
+    else
+      $HELM install vvp $VVP_CHART \
+       --namespace vvp \
+       --values ververica-platform/values.yaml \
+       --values ververica-platform/values-license.yaml
+    fi
   else
-    $HELM --namespace vvp \
-      install vvp ververica/ververica-platform \
-      --values values-vvp.yaml \
-      --values values-license.yaml
+    if [ "$HELM_VERSION" -eq 2 ]; then
+      $HELM install $VVP_CHART \
+       --name vvp \
+       --namespace vvp \
+       --values ververica-platform/values.yaml
+
+      read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/N) " yn
+
+      case $yn in
+           "Y")
+            $HELM install $VVP_CHART \
+             --name vvp \
+             --namespace vvp \
+             --values ververica-platform/values.yaml \
+             --set acceptCommunityEditionLicense=true
+            ;;
+           *)
+            echo "Ververica Platform installation aborted."
+            exit 1
+            ;;
+      esac
+
+    else
+      $HELM install vvp $VVP_CHART \
+       --namespace vvp \
+       --values ververica-platform/values.yaml
+
+      read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/N) " yn
+
+      case $yn in
+           "Y")
+             $HELM install vvp $VVP_CHART \
+             --namespace vvp \
+             --values ververica-platform/values.yaml \
+             --set acceptCommunityEditionLicense=true
+            ;;
+           *)
+            echo "Ververica Platform installation aborted."
+            exit 1
+            ;;
+      esac
+
+    fi
   fi
 }
+
+########
+# Main #
+########
+
+EDITION=community #default value
+
+while [ "$1" != "" ]; do
+
+    case $1 in
+        -h | --help)
+          usage
+          exit
+          ;;
+        -e | --edition)
+          EDITION="$2"
+          case $EDITION in
+              "stream"|"community")
+                ;;
+              *)
+                echo -e "ERROR: unknown edition \"$EDITION\" \n"
+                usage
+                exit 1
+          esac
+          shift
+          shift
+          ;;
+        *)
+          echo -e "ERROR: unknown parameter \"$1\" \n"
+          usage
+          exit 1
+          ;;
+    esac
+done
 
 echo -n "> Detecting Helm version... "
 detect_helm_version
