@@ -14,9 +14,9 @@ vvp:
   ### Configure some global defaults for Deployments in this instance of Ververica Platform
   globalDeploymentDefaults: |
     spec:
+      state: RUNNING
       template:
         spec:
-          state: running
           resources:
             jobmanager:
               cpu: 0.5
@@ -27,10 +27,6 @@ vvp:
           flinkConfiguration:
             state.backend: filesystem
             high-availability: vvp-kubernetes
-
-  ### Provide Ververica Platform License (free trial: www.ververica.com/enterprise-trial)
-  license:
-    data: {} # paste license here
 
 blobStorageCredentials:
   s3:
