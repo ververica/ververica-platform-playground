@@ -23,7 +23,9 @@ detect_helm_version() {
 }
 
 create_namespaces() {
-  kubectl apply -f resources/namespaces.yaml
+  # Create namespace `vvp` and `vvp-jobs` if they do not exist
+  kubectl get namespace vvp > /dev/null 2>&1 || kubectl create namespace vvp
+  kubectl get namespace vvp-jobs > /dev/null 2>&1 || kubectl create namespace vvp-jobs
 }
 
 add_helm_repos() {
@@ -35,10 +37,10 @@ install_minio() {
   if [ "$HELM_VERSION" -eq 2 ]; then
     $HELM install stable/minio \
       --name minio \
-      --namespace minio \
+      --namespace vvp \
       --values minio/values.yaml
   else
-    $HELM --namespace minio \
+    $HELM --namespace vvp \
       install minio stable/minio \
       --values minio/values.yaml
   fi
