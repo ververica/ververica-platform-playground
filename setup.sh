@@ -38,11 +38,11 @@ install_minio() {
     $HELM install stable/minio \
       --name minio \
       --namespace vvp \
-      --values minio/values.yaml
+      --values values-minio.yaml
   else
     $HELM --namespace vvp \
       install minio stable/minio \
-      --values minio/values.yaml
+      --values values-minio.yaml
   fi
 }
 
