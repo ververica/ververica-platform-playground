@@ -72,7 +72,7 @@ echo "> Adding Helm chart repositories..."
 add_helm_repos
 
 echo "> Installing MinIO..."
-install_minio
+install_minio || :
 
 echo "> Installing Ververica Platform..."
-install_vvp
+install_vvp || :
