@@ -50,13 +50,13 @@ install_vvp() {
     $HELM install ververica/ververica-platform \
       --name vvp \
       --namespace vvp \
-      --values ververica-platform/values.yaml \
-      --values ververica-platform/values-license.yaml
+      --values values-vvp.yaml \
+      --values values-license.yaml
   else
     $HELM --namespace vvp \
       install vvp ververica/ververica-platform \
-      --values ververica-platform/values.yaml \
-      --values ververica-platform/values-license.yaml
+      --values values-vvp.yaml \
+      --values values-license.yaml
   fi
 }
 
