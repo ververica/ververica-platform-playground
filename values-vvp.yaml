@@ -34,6 +34,10 @@ vvp:
                 prometheus.io/port: '9249'
                 prometheus.io/scrape: 'true'
 
+  ui:
+    linkTemplates:
+      metrics: http://localhost:3000/d/77Nra5XZz/flink-dashboard?var-deploymentId=<%= deploymentId %>
+
 blobStorageCredentials:
   s3:
     accessKeyId: admin
