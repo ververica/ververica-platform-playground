@@ -21,19 +21,19 @@ detect_helm_version() {
   fi
 }
 
-uninstall_vvp() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM delete --purge vvp
-  else
-    $HELM --namespace vvp delete vvp
-  fi
-}
+helm_uninstall() {
+  local release
+  release="$1"
 
-uninstall_minio() {
+  if [ -z "$release" ]; then
+    echo >&2 "error: release is required"
+    return 1
+  fi
+
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM delete --purge minio
+    $HELM delete --purge "$release" || :
   else
-    $HELM --namespace vvp delete minio
+    $HELM --namespace vvp delete "$release" || :
   fi
 }
 
@@ -46,11 +46,11 @@ echo -n "> Detecting Helm version... "
 detect_helm_version
 echo "detected Helm ${HELM_VERSION}."
 
-echo "> Uninstalling Ververica Platform..."
-uninstall_vvp || :
-
-echo "> Uninstalling MinIO..."
-uninstall_minio || :
+echo "> Uninstalling Helm applications..."
+helm_uninstall minio
+helm_uninstall vvp
+helm_uninstall prometheus
+helm_uninstall grafana
 
 echo "> Deleting Kubernetes namespaces..."
 delete_namespaces

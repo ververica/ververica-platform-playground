@@ -6,7 +6,6 @@ set -o pipefail
 
 HELM=${HELM:-helm}
 HELM_VERSION=
-VVP_CHART="ververica/ververica-platform"
 
 detect_helm_version() {
   local helm_version_string
@@ -48,14 +47,14 @@ install_minio() {
 
 install_vvp() {
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install "$VVP_CHART" \
+    $HELM install ververica/ververica-platform \
       --name vvp \
       --namespace vvp \
       --values ververica-platform/values.yaml \
       --values ververica-platform/values-license.yaml
   else
     $HELM --namespace vvp \
-      install vvp "$VVP_CHART" \
+      install vvp ververica/ververica-platform \
       --values ververica-platform/values.yaml \
       --values ververica-platform/values-license.yaml
   fi

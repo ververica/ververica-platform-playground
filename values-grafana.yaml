@@ -1,0 +1,18 @@
+# Disable authentication
+grafana.ini:
+  auth:
+    disable_login_form: true
+  auth.anonymous:
+    enabled: true
+    org_role: Editor
+
+# Configure the Prometheus datasource
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      isDefault: true
+      url: http://prometheus-server.vvp.svc
