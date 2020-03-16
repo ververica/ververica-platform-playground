@@ -1,0 +1,14 @@
+# Disable all Prometheus services except "server", since they aren't required
+# for the playground.
+
+alertmanager:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+pushgateway:
+  enabled: false

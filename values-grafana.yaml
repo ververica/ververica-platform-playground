@@ -1,0 +1,35 @@
+# Disable authentication
+grafana.ini:
+  auth:
+    disable_login_form: true
+  auth.anonymous:
+    enabled: true
+    org_role: Editor
+
+# Configure the Prometheus datasource
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      isDefault: true
+      url: http://prometheus-server.vvp.svc
+
+# Configure Grafana to load dashboards from the given directory
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: default
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: true
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+
+# Include a sample Flink dashboard with:
+#   --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
