@@ -48,11 +48,13 @@ install_grafana() {
     $HELM install stable/grafana \
       --name grafana \
       --namespace vvp \
-      --values values-grafana.yaml
+      --values values-grafana.yaml \
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
   else
     $HELM --namespace vvp \
       install grafana stable/grafana \
-      --values values-grafana.yaml
+      --values values-grafana.yaml \
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
   fi
 }
 
