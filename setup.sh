@@ -6,15 +6,19 @@ set -o pipefail
 
 HELM=${HELM:-helm}
 HELM_VERSION=
-VVP_CHART="ververica/ververica-platform"
+VVP_CHART=${VVP_CHART:-ververica/ververica-platform}
 
 
 usage() {
-    echo -e "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm. \n"
-    echo "./setup.sh"
-    echo -e "\t -h --help"
-    echo -e "\t -e --edition [community|stream] (default: commmunity)"
+  echo "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm."
+  echo ""
+  echo "./setup.sh"
+  echo -e "\t -h --help"
+  echo -e "\t -e --edition [community|enterprise] (default: commmunity)"
+  echo -e "\t -m --include-metrics"
+  exit 1
 }
+
 
 detect_helm_version() {
   local helm_version_string
@@ -54,116 +58,139 @@ install_minio() {
   fi
 }
 
-install_vvp() {
-
-  $HELM repo add ververica https://charts.ververica.com
-
-  if [ "$vvp_edition" == "stream" ]; then
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install $VVP_CHART \
-       --name vvp \
-       --namespace vvp \
-       --values ververica-platform/values.yaml \
-       --values ververica-platform/values-license.yaml
-    else
-      $HELM install vvp $VVP_CHART \
-       --namespace vvp \
-       --values ververica-platform/values.yaml \
-       --values ververica-platform/values-license.yaml
-    fi
+install_prometheus() {
+  if [ "$HELM_VERSION" -eq 2 ]; then
+    $HELM install stable/prometheus \
+      --name prometheus \
+      --namespace vvp \
+      --values values-prometheus.yaml
   else
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install $VVP_CHART \
-       --name vvp \
-       --namespace vvp \
-       --values ververica-platform/values.yaml
-
-      read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/N) " yn
-
-      case $yn in
-           "Y")
-            $HELM install $VVP_CHART \
-             --name vvp \
-             --namespace vvp \
-             --values ververica-platform/values.yaml \
-             --set acceptCommunityEditionLicense=true
-            ;;
-           *)
-            echo "Ververica Platform installation aborted."
-            exit 1
-            ;;
-      esac
-
-    else
-      $HELM install vvp $VVP_CHART \
-       --namespace vvp \
-       --values ververica-platform/values.yaml
-
-      read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/N) " yn
-
-      case $yn in
-           "Y")
-             $HELM install vvp $VVP_CHART \
-             --namespace vvp \
-             --values ververica-platform/values.yaml \
-             --set acceptCommunityEditionLicense=true
-            ;;
-           *)
-            echo "Ververica Platform installation aborted."
-            exit 1
-            ;;
-      esac
-
-    fi
+    $HELM --namespace vvp \
+      install prometheus stable/prometheus \
+      --values values-prometheus.yaml
   fi
 }
 
-########
-# Main #
-########
+install_grafana() {
+  if [ "$HELM_VERSION" -eq 2 ]; then
+    $HELM install stable/grafana \
+      --name grafana \
+      --namespace vvp \
+      --values values-grafana.yaml \
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+  else
+    $HELM --namespace vvp \
+      install grafana stable/grafana \
+      --values values-grafana.yaml \
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+  fi
+}
 
-EDITION=community #default value
+install_vvp() {
+  local vvp_values_file
 
-while [ "$1" != "" ]; do
+  if [ "$INSTALL_METRICS" -eq 1 ]; then
+    vvp_values_file="values-vvp-metrics.yaml"
+  else
+    vvp_values_file="values-vvp.yaml"
+  fi
 
-    case $1 in
-        -h | --help)
-          usage
-          exit
+  if [ "$EDITION" == "enterprise" ]; then
+    if [ "$HELM_VERSION" -eq 2 ]; then
+      $HELM install "$VVP_CHART" \
+        --name vvp \
+        --namespace vvp \
+        --values "$vvp_values_file" \
+        --values values-license.yaml
+    else
+      $HELM install vvp "$VVP_CHART" \
+        --namespace vvp \
+        --values "$vvp_values_file" \
+        --values values-license.yaml
+    fi
+  else
+    if [ "$HELM_VERSION" -eq 2 ]; then
+      $HELM install "$VVP_CHART" \
+       --name vvp \
+       --namespace vvp \
+       --values "$vvp_values_file"
+    else
+      $HELM install vvp "$VVP_CHART" \
+       --namespace vvp \
+       --values "$vvp_values_file"
+    fi
+
+    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/N) " yn
+
+    case $yn in
+         "Y")
+         if [ "$HELM_VERSION" -eq 2 ]; then
+            $HELM install "$VVP_CHART" \
+             --name vvp \
+             --namespace vvp \
+             --values "$vvp_values_file" \
+             --set acceptCommunityEditionLicense=true
+         else
+            $HELM install vvp "$VVP_CHART" \
+               --namespace vvp \
+               --values "$vvp_values_file" \
+               --set acceptCommunityEditionLicense=true
+         fi
           ;;
-        -e | --edition)
-          EDITION="$2"
-          case $EDITION in
-              "stream"|"community")
-                ;;
-              *)
-                echo -e "ERROR: unknown edition \"$EDITION\" \n"
-                usage
-                exit 1
-          esac
-          shift
-          shift
-          ;;
-        *)
-          echo -e "ERROR: unknown parameter \"$1\" \n"
-          usage
+         *)
+          echo "Ververica Platform installation aborted."
           exit 1
           ;;
     esac
-done
+  fi
+}
 
-echo -n "> Detecting Helm version... "
-detect_helm_version
-echo "detected Helm ${HELM_VERSION}."
+main() {
+  # defaults
+  EDITION="community"
+  INSTALL_METRICS=0
 
-echo "> Creating Kubernetes namespaces..."
-create_namespaces
+  # parse params
+  while [[ "$#" -gt 0 ]]; do case $1 in
+    -e|--edition) EDITION="$2"; shift;shift;;
+    -m|--with-metrics) INSTALL_METRICS=1;shift;;
+    -h|--help) usage; exit 1;;
+    *) usage ; shift; shift;;
+  esac; done
 
-echo "> Adding Helm chart repositories..."
-add_helm_repos
+  # verify params
+  case $EDITION in
+      "enterprise"|"community")
+        ;;
+      *)
+        echo -e "ERROR: unknown edition \"$EDITION\" \n"
+        usage
+        exit 1
+  esac
 
-echo "> Installing MinIO..."
-install_minio || :
+  echo -n "> Detecting Helm version... "
+  detect_helm_version
+  echo "detected Helm ${HELM_VERSION}."
 
-echo "> Installing Ververica Platform..."
-install_vvp || :
+  echo "> Creating Kubernetes namespaces..."
+  create_namespaces
+
+  echo "> Adding Helm chart repositories..."
+  add_helm_repos
+
+  echo "> Installing MinIO..."
+  install_minio || :
+
+  if [ "$INSTALL_METRICS" -eq 1 ]; then
+    echo "> Installing Prometheus..."
+    install_prometheus || :
+
+    echo "> Installing Grafana..."
+    install_grafana || :
+  fi
+
+  echo "> Installing Ververica Platform..."
+  install_vvp || :
+}
+
+main "$@"
