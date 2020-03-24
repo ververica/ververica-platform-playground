@@ -160,7 +160,7 @@ main() {
     -e|--edition) edition="$2"; shift; shift;;
     -m|--with-metrics) install_metrics=1; shift;;
     -h|--help) usage; exit;;
-    *) usage ; shift; shift;;
+    *) usage ; exit 1;;
   esac; done
 
   # verify params
