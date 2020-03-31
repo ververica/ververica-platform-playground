@@ -12,9 +12,9 @@ detect_helm_version() {
   helm_version_string="$($HELM version --short --client)"
 
   if [[ "$helm_version_string" == *"v2"* ]]; then
-    HELM_VERSION=2
+    echo 2
   elif [[ "$helm_version_string" == *"v3"* ]]; then
-    HELM_VERSION=3
+    echo 3
   else
     echo >&2 "Unsupported Helm version: ${helm_version_string}"
     exit 1
@@ -31,9 +31,9 @@ helm_uninstall() {
   fi
 
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM delete --purge "$release" || :
+    $HELM delete --purge "$release" 2>/dev/null || :
   else
-    $HELM --namespace vvp delete "$release" || :
+    $HELM --namespace vvp delete "$release" 2>/dev/null || :
   fi
 }
 
@@ -42,15 +42,38 @@ delete_namespaces() {
   kubectl get namespace vvp-jobs > /dev/null 2>&1 && kubectl delete namespace vvp-jobs || :
 }
 
-echo -n "> Detecting Helm version... "
-detect_helm_version
-echo "detected Helm ${HELM_VERSION}."
+main() {
+  local kube_context
+  kube_context="$(kubectl config current-context)"
 
-echo "> Uninstalling Helm applications..."
-helm_uninstall minio
-helm_uninstall vvp
-helm_uninstall prometheus
-helm_uninstall grafana
+  echo -n "This script will delete all playground components and the 'vvp' and "
+  echo "'vvp-jobs' namespaces from Kubernetes."
+  echo
+  echo "The currently configured Kubernetes context is: ${kube_context}"
+  echo
+  read -r -p "Are you sure you want to continue? (Y/n) " yn
 
-echo "> Deleting Kubernetes namespaces..."
-delete_namespaces
+  case $yn in
+    "Y")
+      ;;
+    *)
+      echo "Aborted."
+      exit 1
+      ;;
+  esac
+
+  echo -n "> Detecting Helm version... "
+  HELM_VERSION="$(detect_helm_version)"
+  echo "detected Helm ${HELM_VERSION}."
+ 
+  echo "> Uninstalling Helm applications..."
+  helm_uninstall minio
+  helm_uninstall vvp
+  helm_uninstall prometheus
+  helm_uninstall grafana
+ 
+  echo "> Deleting Kubernetes namespaces..."
+  delete_namespaces
+}
+
+main
