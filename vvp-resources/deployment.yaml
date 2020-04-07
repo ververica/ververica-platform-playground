@@ -4,11 +4,11 @@ metadata:
   name: TopSpeedWindowing
   namespace: default
 spec:
-  deploymentTargetId: <replace_me>
+  deploymentTargetId: 50afc182-e88e-4e4e-8a31-584cbf5546cc
   template:
     spec:
       artifact:
         kind: JAR
         jarUri: >-
           https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming_2.12/1.10.0/flink-examples-streaming_2.12-1.10.0-TopSpeedWindowing.jar
-      parallelism: 1
+      parallelism: 2
