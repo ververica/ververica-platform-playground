@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class File {
-  private String filename;
+public class ComponentChanged {
+  private String name;
   private int linesChanged;
 }

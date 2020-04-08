@@ -1,7 +1,7 @@
 package com.ververica.platform.io.source;
 
 import com.ververica.platform.entities.Commit;
-import com.ververica.platform.entities.File;
+import com.ververica.platform.entities.FileChanged;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.flink.streaming.api.checkpoint.ListCheckpointed;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHUser;
 import org.kohsuke.github.PagedIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
   private static final int PAGE_SIZE = 100;
   private static final long POLL_INTERVAL_MILLI = 10_000;
 
-  private final Instant startTime;
   private Date lastTime;
   private volatile boolean running = true;
 
@@ -33,16 +33,13 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
 
   public GithubCommitSource(String repoName, Instant startTime) {
     super(repoName);
-    this.startTime = startTime;
     lastTime = Date.from(startTime);
   }
 
   @Override
   public void run(SourceContext<Commit> ctx) throws IOException {
-    LOG.info("Starting to query for Github commits from " + startTime);
-
     while (running) {
-      LOG.info("Fetching commits.");
+      LOG.info("Fetching commits since " + lastTime);
       PagedIterable<GHCommit> commits = repo.queryCommits().since(lastTime).list();
       Date lastCommitDate = lastTime;
 
@@ -50,27 +47,33 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
         for (GHCommit ghCommit : commits.withPageSize(PAGE_SIZE)) {
           lastCommitDate = ghCommit.getCommitDate();
 
+          GHUser author = ghCommit.getAuthor();
           Commit commit =
               Commit.builder()
-                  .author(ghCommit.getAuthor().getName())
+                  .author(author != null ? author.getName() : "unknown")
                   .filesChanged(
                       ghCommit.getFiles().stream()
                           .map(
                               file ->
-                                  File.builder()
+                                  FileChanged.builder()
                                       .filename(file.getFileName())
                                       .linesChanged(file.getLinesChanged())
                                       .build())
                           .collect(Collectors.toList()))
+                  .timestamp(lastCommitDate)
                   .build();
 
+          // TODO consider materializing and sorting for less out-of-orderness
+
           ctx.collectWithTimestamp(commit, lastCommitDate.getTime());
+
+          if (lastTime.getTime() < lastCommitDate.getTime()) {
+            lastTime = lastCommitDate;
+          }
         }
 
-        lastTime = lastCommitDate;
         ctx.emitWatermark(new Watermark(lastTime.getTime()));
       }
-
       try {
         Thread.sleep(POLL_INTERVAL_MILLI);
       } catch (InterruptedException e) {

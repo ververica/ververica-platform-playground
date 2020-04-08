@@ -23,6 +23,20 @@
   </properties>
 
   <dependencies>
+
+
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-connector-elasticsearch7_${scala.binary.version}</artifactId>
+      <version>${flink.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-to-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
@@ -31,10 +45,12 @@
     </dependency>
 
     <dependency>
-      <groupId>io.prometheus</groupId>
-      <artifactId>simpleclient_pushgateway</artifactId>
-      <version>${prometheus.version}</version>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
+      <version>${flink.version}</version>
+      <scope>provided</scope>
     </dependency>
+
     <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>github-api</artifactId>
