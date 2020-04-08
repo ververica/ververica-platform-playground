@@ -40,6 +40,7 @@ helm_uninstall() {
 delete_namespaces() {
   kubectl get namespace vvp > /dev/null 2>&1 && kubectl delete namespace vvp || :
   kubectl get namespace vvp-jobs > /dev/null 2>&1 && kubectl delete namespace vvp-jobs || :
+  kubectl get namespace es > /dev/null 2>&1 && kubectl delete namespace es || :
 }
 
 main() {
@@ -71,7 +72,9 @@ main() {
   helm_uninstall vvp
   helm_uninstall prometheus
   helm_uninstall grafana
- 
+  helm_uninstall kibana
+  helm_uninstall elasticsearch
+
   echo "> Deleting Kubernetes namespaces..."
   delete_namespaces
 }

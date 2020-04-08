@@ -18,6 +18,7 @@ usage() {
   echo "  -h, --help"
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
+  echo "  -es, --with-elastic-stack"
 }
 
 detect_helm_version() {
@@ -40,9 +41,17 @@ create_namespaces() {
   kubectl get namespace vvp-jobs > /dev/null 2>&1 || kubectl create namespace vvp-jobs
 }
 
+create_es_namespace() {
+  kubectl get namespace es > /dev/null 2>&1 || kubectl create namespace es
+}
+
 add_helm_repos() {
   $HELM repo add stable https://kubernetes-charts.storage.googleapis.com
   $HELM repo add ververica https://charts.ververica.com
+}
+
+add_es_repo() {
+  $HELM repo add elastic https://helm.elastic.co
 }
 
 install_minio() {
@@ -83,6 +92,32 @@ install_grafana() {
       install grafana stable/grafana \
       --values values-grafana.yaml \
       --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+  fi
+}
+
+install_kibana() {
+  if [ "$HELM_VERSION" -eq 2 ]; then
+    $HELM install elastic/kibana \
+      --name kibana \
+      --namespace es \
+      --values values-kibana.yaml
+  else
+    $HELM --namespace es \
+      install kibana elastic/kibana \
+      --values values-kibana.yaml
+  fi
+}
+
+install_elasticsearch() {
+  if [ "$HELM_VERSION" -eq 2 ]; then
+    $HELM install elastic/elasticsearch \
+      --name elasticsearch \
+      --namespace es \
+      --values values-elasticsearch.yaml
+  else
+    $HELM --namespace es \
+      install elasticsearch elastic/elasticsearch \
+      --values values-elasticsearch.yaml
   fi
 }
 
@@ -149,16 +184,18 @@ install_vvp() {
 }
 
 main() {
-  local edition install_metrics
+  local edition install_metrics install es
 
   # defaults
   edition="community"
   install_metrics=
+  install_es=
 
   # parse params
   while [[ "$#" -gt 0 ]]; do case $1 in
     -e|--edition) edition="$2"; shift; shift;;
     -m|--with-metrics) install_metrics=1; shift;;
+    -es|--with-elastic-stack) install_elastic=1; shift;;
     -h|--help) usage; exit;;
     *) usage ; exit 1;;
   esac; done
@@ -193,6 +230,18 @@ main() {
 
     echo "> Installing Grafana..."
     install_grafana || :
+  fi
+
+  if [ -n "$install_elastic" ]; then
+
+    create_es_namespace
+    add_es_repo
+
+    echo "> Installing ElasticSearch..."
+    install_elasticsearch || :
+
+    echo "> Installing Kibana..."
+    install_kibana || :
   fi
 
   echo "> Installing Ververica Platform..."
