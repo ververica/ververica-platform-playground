@@ -1,10 +1,10 @@
 package com.ververica.platform;
 
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import com.ververica.platform.io.source.GithubCommitSource;
+import com.ververica.platform.operators.ComponentExtractor;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import com.ververica.platform.entities.Commit;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.ContinuousEventTimeTrigger;
 
 public class FlinkCommitProgram {
 
@@ -12,12 +12,19 @@ public class FlinkCommitProgram {
 
     StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-    DataStreamSource<Commit> commitStream = env.addSource(new GithubCommitSource("apache/flink"));
+    env.addSource(new GithubCommitSource("apache/flink"))
+        .name("flink-commit-source")
+        .uid("flink-commit-source")
+        .flatMap(new ComponentExtractor())
+        .name("component-extractor")
+        .keyBy("name")
+        .timeWindow(Time.days(1))
+        .trigger(ContinuousEventTimeTrigger.of(Time.minutes(1)))
+        .sum("linesChanged")
+        .name("component-activity-window")
+        .uid("component-activity-window")
+        .print();
 
-    commitStream.print();
-
-    env.execute();
-
+    env.execute("Apache Flink Project Dashboard");
   }
-
 }

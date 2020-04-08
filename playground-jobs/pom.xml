@@ -13,20 +13,16 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <flink.version>1.10.0</flink.version>
+    <prometheus.version>0.3.0</prometheus.version>
     <log4j.version>2.13.1</log4j.version>
     <java.version>1.8</java.version>
     <scala.binary.version>2.12</scala.binary.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <spotless-maven-plugin.version>1.20.0</spotless-maven-plugin.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-java</artifactId>
-      <version>${flink.version}</version>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
@@ -35,12 +31,10 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
-      <version>${flink.version}</version>
-      <scope>provided</scope>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_pushgateway</artifactId>
+      <version>${prometheus.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>github-api</artifactId>
@@ -99,6 +93,29 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
+        <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>${spotless-maven-plugin.version}</version>
+            <configuration>
+                <java>
+                    <googleJavaFormat>
+                        <version>1.7</version>
+                        <style>GOOGLE</style>
+                    </googleJavaFormat>
+                    <removeUnusedImports/>
+                </java>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>spotless-check</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -111,7 +128,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>TopSpeedWindowingWithCheckpointing</classifier>
+              <classifier>FlinkCommitProgram</classifier>
               <archive>
                 <manifestEntries>
                   <program-class>com.ververica.platform.FlinkCommitProgram</program-class>
