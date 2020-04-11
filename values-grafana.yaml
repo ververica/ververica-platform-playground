@@ -4,7 +4,7 @@ grafana.ini:
     disable_login_form: true
   auth.anonymous:
     enabled: true
-    org_role: Editor
+    org_role: Admin
 
 # Configure the Prometheus datasource
 datasources:
@@ -16,6 +16,16 @@ datasources:
       access: proxy
       isDefault: true
       url: http://prometheus-server.vvp.svc
+    - name: Elasticsearch
+      type: elasticsearch
+      access: proxy
+      database: "github_stats*"
+      url: http://elasticsearch-master-headless:9200
+      jsonData:
+        timeField: "windowStart"
+        interval: null
+        esVersion: 70
+
 
 # Configure Grafana to load dashboards from the given directory
 dashboardProviders:
@@ -33,3 +43,4 @@ dashboardProviders:
 
 # Include a sample Flink dashboard with:
 #   --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+#   --set-file dashboards.default.github_stats-dashboard.json=github-stats-grafana-dashboard.json

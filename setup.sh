@@ -18,7 +18,7 @@ usage() {
   echo "  -h, --help"
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
-  echo "  -es, --with-elastic-stack"
+  echo "  -es, --with-elastic-search"
 }
 
 detect_helm_version() {
@@ -39,10 +39,6 @@ create_namespaces() {
   # Create namespace `vvp` and `vvp-jobs` if they do not exist
   kubectl get namespace vvp > /dev/null 2>&1 || kubectl create namespace vvp
   kubectl get namespace vvp-jobs > /dev/null 2>&1 || kubectl create namespace vvp-jobs
-}
-
-create_es_namespace() {
-  kubectl get namespace es > /dev/null 2>&1 || kubectl create namespace es
 }
 
 add_helm_repos() {
@@ -86,25 +82,14 @@ install_grafana() {
       --name grafana \
       --namespace vvp \
       --values values-grafana.yaml \
-      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json \
+      --set-file dashboards.default.github_stats-dashboard.json=github-stats-grafana-dashboard.json
   else
     $HELM --namespace vvp \
       install grafana stable/grafana \
       --values values-grafana.yaml \
-      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
-  fi
-}
-
-install_kibana() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install elastic/kibana \
-      --name kibana \
-      --namespace es \
-      --values values-kibana.yaml
-  else
-    $HELM --namespace es \
-      install kibana elastic/kibana \
-      --values values-kibana.yaml
+      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json \
+      --set-file dashboards.default.github_stats-dashboard.json=github-stats-grafana-dashboard.json
   fi
 }
 
@@ -112,10 +97,10 @@ install_elasticsearch() {
   if [ "$HELM_VERSION" -eq 2 ]; then
     $HELM install elastic/elasticsearch \
       --name elasticsearch \
-      --namespace es \
+      --namespace vvp \
       --values values-elasticsearch.yaml
   else
-    $HELM --namespace es \
+    $HELM --namespace vvp \
       install elasticsearch elastic/elasticsearch \
       --values values-elasticsearch.yaml
   fi
@@ -195,7 +180,7 @@ main() {
   while [[ "$#" -gt 0 ]]; do case $1 in
     -e|--edition) edition="$2"; shift; shift;;
     -m|--with-metrics) install_metrics=1; shift;;
-    -es|--with-elastic-stack) install_elastic=1; shift;;
+    -es|--with-elastic-search) install_elastic=1; shift;;
     -h|--help) usage; exit;;
     *) usage ; exit 1;;
   esac; done
@@ -234,14 +219,9 @@ main() {
 
   if [ -n "$install_elastic" ]; then
 
-    create_es_namespace
-    add_es_repo
-
     echo "> Installing ElasticSearch..."
+    add_es_repo
     install_elasticsearch || :
-
-    echo "> Installing Kibana..."
-    install_kibana || :
   fi
 
   echo "> Installing Ververica Platform..."
