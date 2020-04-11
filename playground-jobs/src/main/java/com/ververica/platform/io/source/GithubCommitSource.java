@@ -5,6 +5,7 @@ import com.ververica.platform.entities.FileChanged;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -22,26 +23,27 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
   private static final Logger LOG = LoggerFactory.getLogger(GithubCommitSource.class);
 
   private static final int PAGE_SIZE = 100;
-  private static final long POLL_INTERVAL_MILLI = 10_000;
+  private static final long POLL_INTERVAL_MILLI = 1_000;
 
-  private Date lastTime;
+  private Instant lastTime;
   private volatile boolean running = true;
 
   public GithubCommitSource(String repoName) {
-    this(repoName, Instant.now().minus(1, ChronoUnit.DAYS));
+    this(repoName, Instant.now().minus(12*30*24, ChronoUnit.HOURS));
   }
 
   public GithubCommitSource(String repoName, Instant startTime) {
     super(repoName);
-    lastTime = Date.from(startTime);
+    lastTime = startTime;
   }
 
   @Override
   public void run(SourceContext<Commit> ctx) throws IOException {
     while (running) {
-      LOG.info("Fetching commits since " + lastTime);
-      PagedIterable<GHCommit> commits = repo.queryCommits().since(lastTime).list();
-      Date lastCommitDate = lastTime;
+      Instant until = getUntilFor(lastTime);
+      LOG.info("Fetching commits since {} until {}", lastTime, until);
+      PagedIterable<GHCommit> commits = repo.queryCommits().since(Date.from(lastTime)).until(Date.from(until)).list();
+      Date lastCommitDate;
 
       synchronized (ctx.getCheckpointLock()) {
         for (GHCommit ghCommit : commits.withPageSize(PAGE_SIZE)) {
@@ -67,12 +69,10 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
 
           ctx.collectWithTimestamp(commit, lastCommitDate.getTime());
 
-          if (lastTime.getTime() < lastCommitDate.getTime()) {
-            lastTime = lastCommitDate;
-          }
         }
 
-        ctx.emitWatermark(new Watermark(lastTime.getTime()));
+        lastTime = until;
+        ctx.emitWatermark(new Watermark(lastTime.toEpochMilli()));
       }
       try {
         Thread.sleep(POLL_INTERVAL_MILLI);
@@ -89,11 +89,22 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
 
   @Override
   public List<Instant> snapshotState(long checkpointId, long timestamp) {
-    return Collections.singletonList(lastTime.toInstant());
+    return Collections.singletonList(lastTime);
   }
 
   @Override
   public void restoreState(List<Instant> state) {
-    lastTime = Date.from(state.get(0));
+    lastTime = state.get(0);
+  }
+
+  public Instant getUntilFor(Instant since) {
+
+    Instant maybeUntil = since.plus(1, ChronoUnit.HOURS);
+
+    if (maybeUntil.compareTo(Instant.now()) > 0) {
+      return Instant.now();
+    } else {
+      return maybeUntil;
+    }
   }
 }

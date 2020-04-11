@@ -54,13 +54,13 @@ public class FlinkCommitProgram {
             .flatMap(new ComponentExtractor())
             .name("component-extractor")
             .keyBy(componentChanged -> componentChanged.getName())
-            .timeWindow(Time.days(1))
-            .trigger(ContinuousEventTimeTrigger.of(Time.minutes(1)))
+            .timeWindow(Time.hours(1))
             .aggregate(new ComponentChangedAggeragator(), new ComponentChangedSummarizer())
             .name("component-activity-window")
             .uid("component-activity-window");
 
-    componentCounts.addSink(getElasticsearchSink());
+  componentCounts.addSink(getElasticsearchSink());
+  componentCounts.printToErr();
 
     env.execute("Apache Flink Project Dashboard");
   }
@@ -86,8 +86,8 @@ public class FlinkCommitProgram {
                       jsonBuilder()
                           .startObject()
                           .field("component", element.getComponentName())
-                          .field("windowStart", element.getWindowStart())
-                          .field("windowEnd", element.getWindowEnd())
+                          .timeField("windowStart", element.getWindowStart())
+                          .timeField("windowEnd", element.getWindowEnd())
                           .field("linesChanged", element.getLinesChanged())
                           .endObject();
                 } catch (IOException e) {
