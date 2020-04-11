@@ -5,7 +5,6 @@ import com.ververica.platform.entities.FileChanged;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,18 +22,20 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
   private static final Logger LOG = LoggerFactory.getLogger(GithubCommitSource.class);
 
   private static final int PAGE_SIZE = 100;
-  private static final long POLL_INTERVAL_MILLI = 1_000;
+
+  private final long pollIntervalMillis;
 
   private Instant lastTime;
   private volatile boolean running = true;
 
   public GithubCommitSource(String repoName) {
-    this(repoName, Instant.now().minus(12*30*24, ChronoUnit.HOURS));
+    this(repoName, Instant.now(), 1000);
   }
 
-  public GithubCommitSource(String repoName, Instant startTime) {
+  public GithubCommitSource(String repoName, Instant startTime, long pollIntervalMillis) {
     super(repoName);
     lastTime = startTime;
+    this.pollIntervalMillis = pollIntervalMillis;
   }
 
   @Override
@@ -42,7 +43,8 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
     while (running) {
       Instant until = getUntilFor(lastTime);
       LOG.info("Fetching commits since {} until {}", lastTime, until);
-      PagedIterable<GHCommit> commits = repo.queryCommits().since(Date.from(lastTime)).until(Date.from(until)).list();
+      PagedIterable<GHCommit> commits =
+          repo.queryCommits().since(Date.from(lastTime)).until(Date.from(until)).list();
       Date lastCommitDate;
 
       synchronized (ctx.getCheckpointLock()) {
@@ -68,14 +70,13 @@ public class GithubCommitSource extends GithubSource<Commit> implements ListChec
           // TODO consider materializing and sorting for less out-of-orderness
 
           ctx.collectWithTimestamp(commit, lastCommitDate.getTime());
-
         }
 
         lastTime = until;
         ctx.emitWatermark(new Watermark(lastTime.toEpochMilli()));
       }
       try {
-        Thread.sleep(POLL_INTERVAL_MILLI);
+        Thread.sleep(pollIntervalMillis);
       } catch (InterruptedException e) {
         running = false;
       }

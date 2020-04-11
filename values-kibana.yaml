@@ -1,9 +1,0 @@
-elasticsearchHosts: http://elasticsearch-master-headless:9200
-#resources: 
-#  requests:   
-#    cpu: 500m
-#    memory: 500Mi
-#  limits: 
-#    cpu: 500m
-#    memory: 500Mi
-  

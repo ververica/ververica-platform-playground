@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Deployment
+spec:
+  deploymentTargetId: <replace_me>
+  template:
+    spec:
+      artifact:
+        kind: JAR
+        entryClass: com.ververica.platform.FlinkCommitProgram
+        jarUri: 's3://vvp/artifacts/namespaces/default/playground-jobs-1.0.jar'
+        mainArgs: '--poll-interval 100 --start-date "2019-01-01T00:00:00.00Z"'
+      kubernetes:
+          envVars:
+            - name: GITHUB_OAUTH
+              value: <replace_me>
