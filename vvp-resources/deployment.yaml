@@ -1,14 +1,15 @@
-kind: Deployment
 apiVersion: v1
-metadata:
-  name: TopSpeedWindowing
-  namespace: default
+kind: Deployment
 spec:
-  deploymentTargetId: 50afc182-e88e-4e4e-8a31-584cbf5546cc
+  deploymentTargetId: <replace_me>
   template:
     spec:
       artifact:
         kind: JAR
-        jarUri: >-
-          https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming_2.12/1.10.0/flink-examples-streaming_2.12-1.10.0-TopSpeedWindowing.jar
-      parallelism: 2
+        entryClass: com.ververica.platform.FlinkCommitProgram
+        jarUri: 's3://vvp/artifacts/namespaces/default/lab-flink-repository-analytics-1.0.0-SNAPSHOT.jar'
+        mainArgs: '--poll-interval-ms 100 --start-date "2019-01-01T00:00:00.00Z"'
+      kubernetes:
+          envVars:
+            - name: GITHUB_OAUTH
+              value: <replace_me>

@@ -71,7 +71,8 @@ main() {
   helm_uninstall vvp
   helm_uninstall prometheus
   helm_uninstall grafana
- 
+  helm_uninstall elasticsearch
+
   echo "> Deleting Kubernetes namespaces..."
   delete_namespaces
 }
