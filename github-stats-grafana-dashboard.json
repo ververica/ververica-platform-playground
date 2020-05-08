@@ -340,7 +340,7 @@
     "list": []
   },
   "time": {
-    "from": "now-1y",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
