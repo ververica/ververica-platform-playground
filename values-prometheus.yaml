@@ -13,7 +13,6 @@ nodeExporter:
 pushgateway:
   enabled: false
 
-# extra scraping configs
 # | is required, because extraScrapeConfigs is expected to be a string
 
 extraScrapeConfigs: |
@@ -25,7 +24,7 @@ extraScrapeConfigs: |
       - role: pod
 
     relabel_configs:
-      #Custom
+      # Custom
       - source_labels: [__meta_kubernetes_pod_annotation_ververica_com_scrape_every_2s]
         action: keep
         regex: true
