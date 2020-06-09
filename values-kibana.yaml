@@ -1,0 +1,48 @@
+fullnameOverride: "kibana"
+
+elasticsearchHosts: "http://elasticsearch-master:9200"
+
+replicas: 1
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "500Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1Gi"
+
+# Allows you to add any config files in /usr/share/kibana/config/
+# such as kibana.yml
+kibanaConfig:
+  kibana.yml: |
+    logging.quiet: true
+    telemetry.enabled: false
+    telemetry.optIn: false
+
+# Hard means that by default pods will only be scheduled if there are enough nodes for them
+# and that they will never end up on the same node. Setting this to soft will do this "best effort"
+antiAffinity: "soft"
+
+# This is the max unavailable setting for the pod disruption budget
+# The default value of 1 will make sure that kubernetes won't allow more than 1
+# of your pods to be unavailable during maintenance
+maxUnavailable: 0
+
+lifecycle:
+  postStart:
+    exec:
+      command:
+        - bash
+        - -c
+        - |
+          #!/bin/bash
+          # Import a dashboard
+          KB_URL=http://localhost:5601
+          while [[ "$(curl -s -o /dev/null -w '%{http_code}\n' -L $KB_URL)" != "200" ]]; do sleep 1; done
+          curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
+              --data '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' \
+              "$KB_URL/api/saved_objects/index-pattern/logstash-*"
+          curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
+              --data '{"changes":{"defaultIndex":"logstash-*","doc_table:highlight":false}}' \
+              "$KB_URL/api/kibana/settings"

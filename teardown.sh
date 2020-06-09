@@ -67,12 +67,15 @@ main() {
   echo -n "> Detecting Helm version... "
   HELM_VERSION="$(detect_helm_version)"
   echo "detected Helm ${HELM_VERSION}."
- 
+
   echo "> Uninstalling Helm applications..."
   helm_uninstall minio
   helm_uninstall vvp
   helm_uninstall prometheus
   helm_uninstall grafana
+  helm_uninstall elasticsearch
+  helm_uninstall fluentd
+  helm_uninstall kibana
  
   echo "> Deleting Kubernetes namespaces..."
   delete_namespaces

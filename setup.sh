@@ -18,6 +18,7 @@ usage() {
   echo "  -h, --help"
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
+  echo "  -l, --with-logging"
 }
 
 detect_helm_version() {
@@ -42,6 +43,8 @@ create_namespaces() {
 
 add_helm_repos() {
   $HELM repo add stable https://kubernetes-charts.storage.googleapis.com
+  $HELM repo add kiwigrid https://kiwigrid.github.io
+  $HELM repo add elastic https://helm.elastic.co
   $HELM repo add ververica https://charts.ververica.com
 }
 
@@ -80,11 +83,25 @@ install_grafana() {
       --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
 }
 
+install_elasticsearch() {
+  helm_install elasticsearch elastic/elasticsearch vvp values-elasticsearch.yaml
+}
+
+install_fluentd() {
+  helm_install fluentd kiwigrid/fluentd-elasticsearch vvp values-fluentd.yaml
+}
+
+install_kibana() {
+  helm_install kibana elastic/kibana vvp values-kibana.yaml
+}
+
 install_vvp() {
-  local edition install_metrics vvp_values_file
+  local edition install_metrics install_logging vvp_values_file helm_additional_parameters
 
   edition="$1"
   install_metrics="$2"
+  install_logging="$3"
+  helm_additional_parameters=
 
   if [ -n "$install_metrics" ]; then
     vvp_values_file="values-vvp-with-metrics.yaml"
@@ -92,20 +109,24 @@ install_vvp() {
     vvp_values_file="values-vvp.yaml"
   fi
 
+  if [ -n "$install_logging" ]; then
+    helm_additional_parameters="--values values-vvp-add-logging.yaml"
+  fi
+
   if [ "$edition" == "enterprise" ]; then
-    helm_install_vvp --values values-license.yaml
+    helm_install_vvp --values values-license.yaml $helm_additional_parameters
   else
     # try installation once (aborts and displays license)
-    helm_install_vvp
+    helm_install_vvp $helm_additional_parameters
 
     read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (y/N) " yn
 
     case "$yn" in
       "y")
-        helm_install_vvp --set acceptCommunityEditionLicense=true
+        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
         ;;
       "Y")
-        helm_install_vvp --set acceptCommunityEditionLicense=true
+        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
         ;;
       *)
         echo "Ververica Platform installation aborted."
@@ -120,16 +141,18 @@ helm_install_vvp() {
 }
 
 main() {
-  local edition install_metrics
+  local edition install_metrics install_logging
 
   # defaults
   edition="community"
   install_metrics=
+  install_logging=
 
   # parse params
   while [[ "$#" -gt 0 ]]; do case $1 in
     -e|--edition) edition="$2"; shift; shift;;
     -m|--with-metrics) install_metrics=1; shift;;
+    -l|--with-logging) install_logging=1; shift;;
     -h|--help) usage; exit;;
     *) usage ; exit 1;;
   esac; done
@@ -166,8 +189,19 @@ main() {
     install_grafana || :
   fi
 
+  if [ -n "$install_logging" ]; then
+    echo "> Installing Elasticsearch..."
+    install_elasticsearch || :
+
+    echo "> Installing Fluentd..."
+    install_fluentd || :
+
+    echo "> Installing Kibana..."
+    install_kibana || :
+  fi
+
   echo "> Installing Ververica Platform..."
-  install_vvp "$edition" "$install_metrics" || :
+  install_vvp "$edition" "$install_metrics" "$install_logging" || :
 
   echo "> Waiting for all Deployments and Pods to become ready..."
   kubectl --namespace vvp wait --timeout=5m --for=condition=available deployments --all
