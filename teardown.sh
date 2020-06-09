@@ -51,9 +51,11 @@ main() {
   echo
   echo "The currently configured Kubernetes context is: ${kube_context}"
   echo
-  read -r -p "Are you sure you want to continue? (Y/n) " yn
+  read -r -p "Are you sure you want to continue? (y/N) " yn
 
   case $yn in
+    "y")
+      ;;
     "Y")
       ;;
     *)

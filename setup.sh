@@ -98,9 +98,12 @@ install_vvp() {
     # try installation once (aborts and displays license)
     helm_install_vvp
 
-    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/n) " yn
+    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (y/N) " yn
 
     case "$yn" in
+      "y")
+        helm_install_vvp --set acceptCommunityEditionLicense=true
+        ;;
       "Y")
         helm_install_vvp --set acceptCommunityEditionLicense=true
         ;;
