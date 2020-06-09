@@ -45,45 +45,39 @@ add_helm_repos() {
   $HELM repo add ververica https://charts.ververica.com
 }
 
-install_minio() {
+helm_install() {
+  local name chart namespace values_file
+
+  name="$1"; shift
+  chart="$1"; shift
+  namespace="$1"; shift
+  values_file="$1"; shift
+
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/minio \
-      --name minio \
-      --namespace vvp \
-      --values values-minio.yaml
+    $HELM install "$chart" \
+      --name $name \
+      --namespace $namespace \
+      --values "$values_file" \
+      "$@"
   else
-    $HELM --namespace vvp \
-      install minio stable/minio \
-      --values values-minio.yaml
+    $HELM --namespace $namespace \
+      install $name "$chart" \
+      --values "$values_file" \
+      "$@"
   fi
+}
+
+install_minio() {
+  helm_install minio stable/minio vvp values-minio.yaml
 }
 
 install_prometheus() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/prometheus \
-      --name prometheus \
-      --namespace vvp \
-      --values values-prometheus.yaml
-  else
-    $HELM --namespace vvp \
-      install prometheus stable/prometheus \
-      --values values-prometheus.yaml
-  fi
+  helm_install prometheus stable/prometheus vvp values-prometheus.yaml
 }
 
 install_grafana() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/grafana \
-      --name grafana \
-      --namespace vvp \
-      --values values-grafana.yaml \
+  helm_install grafana stable/grafana vvp values-grafana.yaml \
       --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
-  else
-    $HELM --namespace vvp \
-      install grafana stable/grafana \
-      --values values-grafana.yaml \
-      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
-  fi
 }
 
 install_vvp() {
@@ -99,46 +93,16 @@ install_vvp() {
   fi
 
   if [ "$edition" == "enterprise" ]; then
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install "$VVP_CHART" \
-        --name vvp \
-        --namespace vvp \
-        --values "$vvp_values_file" \
-        --values values-license.yaml
-    else
-      $HELM --namespace vvp \
-        install vvp "$VVP_CHART" \
-        --values "$vvp_values_file" \
-        --values values-license.yaml
-    fi
+    helm_install_vvp --values values-license.yaml
   else
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install "$VVP_CHART" \
-        --name vvp \
-        --namespace vvp \
-        --values "$vvp_values_file"
-    else
-      $HELM --namespace vvp \
-        install vvp "$VVP_CHART" \
-        --values "$vvp_values_file"
-    fi
+    # try installation once (aborts and displays license)
+    helm_install_vvp
 
     read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/n) " yn
 
-    case $yn in
+    case "$yn" in
       "Y")
-        if [ "$HELM_VERSION" -eq 2 ]; then
-          $HELM install "$VVP_CHART" \
-            --name vvp \
-            --namespace vvp \
-            --values "$vvp_values_file" \
-            --set acceptCommunityEditionLicense=true
-        else
-          $HELM --namespace vvp \
-            install vvp "$VVP_CHART" \
-            --values "$vvp_values_file" \
-            --set acceptCommunityEditionLicense=true
-        fi
+        helm_install_vvp --set acceptCommunityEditionLicense=true
         ;;
       *)
         echo "Ververica Platform installation aborted."
@@ -146,6 +110,10 @@ install_vvp() {
         ;;
     esac
   fi
+}
+
+helm_install_vvp() {
+  helm_install vvp "$VVP_CHART" vvp "$vvp_values_file" "$@"
 }
 
 main() {
