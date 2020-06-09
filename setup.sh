@@ -168,6 +168,10 @@ main() {
 
   echo "> Installing Ververica Platform..."
   install_vvp "$edition" "$install_metrics" || :
+
+  echo "> Waiting for all Deployments and Pods to become ready..."
+  kubectl --namespace vvp wait --timeout=5m --for=condition=available deployments --all
+  kubectl --namespace vvp wait --timeout=5m --for=condition=ready pods --all
 }
 
 main "$@"
