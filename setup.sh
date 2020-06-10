@@ -18,6 +18,7 @@ usage() {
   echo "  -h, --help"
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
+  echo "  -l, --with-logging"
 }
 
 detect_helm_version() {
@@ -42,55 +43,65 @@ create_namespaces() {
 
 add_helm_repos() {
   $HELM repo add stable https://kubernetes-charts.storage.googleapis.com
+  $HELM repo add kiwigrid https://kiwigrid.github.io
+  $HELM repo add elastic https://helm.elastic.co
   $HELM repo add ververica https://charts.ververica.com
 }
 
-install_minio() {
+helm_install() {
+  local name chart namespace values_file
+
+  name="$1"; shift
+  chart="$1"; shift
+  namespace="$1"; shift
+  values_file="$1"; shift
+
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/minio \
-      --name minio \
-      --namespace vvp \
-      --values values-minio.yaml
+    $HELM install "$chart" \
+      --name $name \
+      --namespace $namespace \
+      --values "$values_file" \
+      "$@"
   else
-    $HELM --namespace vvp \
-      install minio stable/minio \
-      --values values-minio.yaml
+    $HELM --namespace $namespace \
+      install $name "$chart" \
+      --values "$values_file" \
+      "$@"
   fi
+}
+
+install_minio() {
+  helm_install minio stable/minio vvp values-minio.yaml
 }
 
 install_prometheus() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/prometheus \
-      --name prometheus \
-      --namespace vvp \
-      --values values-prometheus.yaml
-  else
-    $HELM --namespace vvp \
-      install prometheus stable/prometheus \
-      --values values-prometheus.yaml
-  fi
+  helm_install prometheus stable/prometheus vvp values-prometheus.yaml
 }
 
 install_grafana() {
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/grafana \
-      --name grafana \
-      --namespace vvp \
-      --values values-grafana.yaml \
+  helm_install grafana stable/grafana vvp values-grafana.yaml \
       --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
-  else
-    $HELM --namespace vvp \
-      install grafana stable/grafana \
-      --values values-grafana.yaml \
-      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
-  fi
+}
+
+install_elasticsearch() {
+  helm_install elasticsearch elastic/elasticsearch vvp values-elasticsearch.yaml
+}
+
+install_fluentd() {
+  helm_install fluentd kiwigrid/fluentd-elasticsearch vvp values-fluentd.yaml
+}
+
+install_kibana() {
+  helm_install kibana elastic/kibana vvp values-kibana.yaml
 }
 
 install_vvp() {
-  local edition install_metrics vvp_values_file
+  local edition install_metrics install_logging vvp_values_file helm_additional_parameters
 
   edition="$1"
   install_metrics="$2"
+  install_logging="$3"
+  helm_additional_parameters=
 
   if [ -n "$install_metrics" ]; then
     vvp_values_file="values-vvp-with-metrics.yaml"
@@ -98,47 +109,24 @@ install_vvp() {
     vvp_values_file="values-vvp.yaml"
   fi
 
+  if [ -n "$install_logging" ]; then
+    helm_additional_parameters="--values values-vvp-add-logging.yaml"
+  fi
+
   if [ "$edition" == "enterprise" ]; then
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install "$VVP_CHART" \
-        --name vvp \
-        --namespace vvp \
-        --values "$vvp_values_file" \
-        --values values-license.yaml
-    else
-      $HELM --namespace vvp \
-        install vvp "$VVP_CHART" \
-        --values "$vvp_values_file" \
-        --values values-license.yaml
-    fi
+    helm_install_vvp --values values-license.yaml $helm_additional_parameters
   else
-    if [ "$HELM_VERSION" -eq 2 ]; then
-      $HELM install "$VVP_CHART" \
-        --name vvp \
-        --namespace vvp \
-        --values "$vvp_values_file"
-    else
-      $HELM --namespace vvp \
-        install vvp "$VVP_CHART" \
-        --values "$vvp_values_file"
-    fi
+    # try installation once (aborts and displays license)
+    helm_install_vvp $helm_additional_parameters
 
-    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (Y/n) " yn
+    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (y/N) " yn
 
-    case $yn in
+    case "$yn" in
+      "y")
+        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
+        ;;
       "Y")
-        if [ "$HELM_VERSION" -eq 2 ]; then
-          $HELM install "$VVP_CHART" \
-            --name vvp \
-            --namespace vvp \
-            --values "$vvp_values_file" \
-            --set acceptCommunityEditionLicense=true
-        else
-          $HELM --namespace vvp \
-            install vvp "$VVP_CHART" \
-            --values "$vvp_values_file" \
-            --set acceptCommunityEditionLicense=true
-        fi
+        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
         ;;
       *)
         echo "Ververica Platform installation aborted."
@@ -148,17 +136,23 @@ install_vvp() {
   fi
 }
 
+helm_install_vvp() {
+  helm_install vvp "$VVP_CHART" vvp "$vvp_values_file" "$@"
+}
+
 main() {
-  local edition install_metrics
+  local edition install_metrics install_logging
 
   # defaults
   edition="community"
   install_metrics=
+  install_logging=
 
   # parse params
   while [[ "$#" -gt 0 ]]; do case $1 in
     -e|--edition) edition="$2"; shift; shift;;
     -m|--with-metrics) install_metrics=1; shift;;
+    -l|--with-logging) install_logging=1; shift;;
     -h|--help) usage; exit;;
     *) usage ; exit 1;;
   esac; done
@@ -195,8 +189,23 @@ main() {
     install_grafana || :
   fi
 
+  if [ -n "$install_logging" ]; then
+    echo "> Installing Elasticsearch..."
+    install_elasticsearch || :
+
+    echo "> Installing Fluentd..."
+    install_fluentd || :
+
+    echo "> Installing Kibana..."
+    install_kibana || :
+  fi
+
   echo "> Installing Ververica Platform..."
-  install_vvp "$edition" "$install_metrics" || :
+  install_vvp "$edition" "$install_metrics" "$install_logging" || :
+
+  echo "> Waiting for all Deployments and Pods to become ready..."
+  kubectl --namespace vvp wait --timeout=5m --for=condition=available deployments --all
+  kubectl --namespace vvp wait --timeout=5m --for=condition=ready pods --all
 }
 
 main "$@"

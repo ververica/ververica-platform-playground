@@ -1,0 +1,5 @@
+vvp:
+  ui:
+    linkTemplates:
+      jobLogs: "http://localhost:5601/app/kibana#/discover?_g=()&_a=(columns:!(level,host,message),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.labels.jobId:<%= jobId %>')),sort:!('@timestamp',desc))&"
+      deploymentLogs: "http://localhost:5601/app/kibana#/discover?_g=()&_a=(columns:!(level,host,message,jobId),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.labels.deploymentId:<%= deploymentId %>')),sort:!('@timestamp',desc))&"
