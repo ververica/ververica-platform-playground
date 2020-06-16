@@ -3,3 +3,8 @@ secretKey: password
 defaultBucket:
   enabled: true
   name: vvp
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
