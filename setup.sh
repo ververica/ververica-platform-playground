@@ -5,7 +5,6 @@ set -o nounset
 set -o pipefail
 
 HELM=${HELM:-helm}
-HELM_VERSION=
 VVP_CHART=${VVP_CHART:-ververica/ververica-platform}
 
 usage() {
@@ -19,20 +18,6 @@ usage() {
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
   echo "  -l, --with-logging"
-}
-
-detect_helm_version() {
-  local helm_version_string
-  helm_version_string="$($HELM version --short --client)"
-
-  if [[ "$helm_version_string" == *"v2"* ]]; then
-    echo 2
-  elif [[ "$helm_version_string" == *"v3"* ]]; then
-    echo 3
-  else
-    echo >&2 "Unsupported Helm version: ${helm_version_string}"
-    exit 1
-  fi
 }
 
 create_namespaces() {
@@ -55,17 +40,10 @@ helm_install() {
   chart="$1"; shift
   namespace="$1"; shift
 
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM \
-      upgrade --install "$name" "$chart" \
-      --namespace $namespace \
-      "$@"
-  else
-    $HELM \
-      --namespace $namespace \
-      upgrade --install "$name" "$chart" \
-      "$@"
-  fi
+  $HELM \
+    --namespace $namespace \
+    upgrade --install "$name" "$chart" \
+    "$@"
 }
 
 install_minio() {
@@ -172,10 +150,6 @@ main() {
       usage
       exit 1
   esac
-
-  echo -n "> Detecting Helm version... "
-  HELM_VERSION="$(detect_helm_version)"
-  echo "detected Helm ${HELM_VERSION}."
 
   echo "> Creating Kubernetes namespaces..."
   create_namespaces
