@@ -1,13 +1,15 @@
 replicas: 1
 minimumMasterNodes: 1
 
+esJavaOpts: "-Xmx512m -Xms512m"
+
 resources:
   requests:
     cpu: "100m"
-    memory: "2Gi"
+    memory: "1Gi"
   limits:
     cpu: "1000m"
-    memory: "2Gi"
+    memory: "1Gi"
 
 # Hard means that by default pods will only be scheduled if there are enough nodes for them
 # and that they will never end up on the same node. Setting this to soft will do this "best effort"
