@@ -49,7 +49,7 @@ add_helm_repos() {
 }
 
 helm_install() {
-  local name chart namespace values_file
+  local name chart namespace
 
   name="$1"; shift
   chart="$1"; shift
@@ -57,15 +57,15 @@ helm_install() {
   values_file="$1"; shift
 
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install "$chart" \
-      --name $name \
+    $HELM \
+      upgrade --install "$name" "$chart" \
       --namespace $namespace \
       --values "$values_file" \
       "$@"
   else
-    $HELM --namespace $namespace \
-      install $name "$chart" \
-      --values "$values_file" \
+    $HELM \
+      --namespace $namespace \
+      upgrade --install "$name" "$chart" \
       "$@"
   fi
 }
@@ -104,13 +104,11 @@ install_vvp() {
   helm_additional_parameters=
 
   if [ -n "$install_metrics" ]; then
-    vvp_values_file="values-vvp-with-metrics.yaml"
-  else
-    vvp_values_file="values-vvp.yaml"
+    helm_additional_parameters="${helm_additional_parameters} --values values-vvp-add-metrics.yaml"
   fi
 
   if [ -n "$install_logging" ]; then
-    helm_additional_parameters="--values values-vvp-add-logging.yaml"
+    helm_additional_parameters="${helm_additional_parameters} --values values-vvp-add-logging.yaml"
   fi
 
   if [ "$edition" == "enterprise" ]; then
