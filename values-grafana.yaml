@@ -31,5 +31,8 @@ dashboardProviders:
       options:
         path: /var/lib/grafana/dashboards/default
 
+# Don't regenerate admin password on each upgrade
+adminPassword: password
+
 # Include a sample Flink dashboard with:
 #   --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
