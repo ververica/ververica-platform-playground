@@ -7,10 +7,10 @@ replicas: 1
 resources:
   requests:
     cpu: "100m"
-    memory: "500Mi"
+    memory: "256Mi"
   limits:
     cpu: "1000m"
-    memory: "1Gi"
+    memory: "256Mi"
 
 # Allows you to add any config files in /usr/share/kibana/config/
 # such as kibana.yml
@@ -33,16 +33,16 @@ lifecycle:
   postStart:
     exec:
       command:
-        - bash
-        - -c
-        - |
-          #!/bin/bash
-          # Import a dashboard
-          KB_URL=http://localhost:5601
-          while [[ "$(curl -s -o /dev/null -w '%{http_code}\n' -L $KB_URL)" != "200" ]]; do sleep 1; done
-          curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
-              --data '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' \
-              "$KB_URL/api/saved_objects/index-pattern/logstash-*"
-          curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
-              --data '{"changes":{"defaultIndex":"logstash-*","doc_table:highlight":false}}' \
-              "$KB_URL/api/kibana/settings"
+      - bash
+      - -c
+      - |
+        #!/bin/bash
+        # Import a dashboard
+        KB_URL=http://localhost:5601
+        while [[ "$(curl -s -o /dev/null -w '%{http_code}\n' -L $KB_URL)" != "200" ]]; do sleep 1; done
+        curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
+            --data '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}' \
+            "$KB_URL/api/saved_objects/index-pattern/logstash-*"
+        curl -s -X POST -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
+            --data '{"changes":{"defaultIndex":"logstash-*","doc_table:highlight":false}}' \
+            "$KB_URL/api/kibana/settings"

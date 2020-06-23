@@ -1,13 +1,15 @@
 replicas: 1
 minimumMasterNodes: 1
 
+esJavaOpts: "-Xmx512m -Xms512m"
+
 resources:
   requests:
     cpu: "100m"
-    memory: "2Gi"
+    memory: "1Gi"
   limits:
     cpu: "1000m"
-    memory: "2Gi"
+    memory: "1Gi"
 
 # Hard means that by default pods will only be scheduled if there are enough nodes for them
 # and that they will never end up on the same node. Setting this to soft will do this "best effort"
@@ -20,3 +22,15 @@ maxUnavailable: 0
 
 # all primary shards are assigned, replicas unassigned (this is expected with 1 node only!)
 clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
+
+# to avoid requiring running as a privileged container
+sysctlInitContainer:
+  enabled: false
+
+extraEnvs:
+# skip bootstrap check that enforces sysctl vm.max_map_count >= 262144
+- name: discovery.type
+  value: single-node
+# this is set by the chart, but may not be set with discovery.type=single-node
+- name: cluster.initial_master_nodes
+  value: ""

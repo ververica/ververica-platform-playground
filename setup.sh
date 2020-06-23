@@ -5,7 +5,6 @@ set -o nounset
 set -o pipefail
 
 HELM=${HELM:-helm}
-HELM_VERSION=
 VVP_CHART=${VVP_CHART:-ververica/ververica-platform}
 
 usage() {
@@ -19,20 +18,6 @@ usage() {
   echo "  -e, --edition [community|enterprise] (default: commmunity)"
   echo "  -m, --with-metrics"
   echo "  -l, --with-logging"
-}
-
-detect_helm_version() {
-  local helm_version_string
-  helm_version_string="$($HELM version --short --client)"
-
-  if [[ "$helm_version_string" == *"v2"* ]]; then
-    echo 2
-  elif [[ "$helm_version_string" == *"v3"* ]]; then
-    echo 3
-  else
-    echo >&2 "Unsupported Helm version: ${helm_version_string}"
-    exit 1
-  fi
 }
 
 create_namespaces() {
@@ -49,54 +34,57 @@ add_helm_repos() {
 }
 
 helm_install() {
-  local name chart namespace values_file
+  local name chart namespace
 
   name="$1"; shift
   chart="$1"; shift
   namespace="$1"; shift
-  values_file="$1"; shift
 
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install "$chart" \
-      --name $name \
-      --namespace $namespace \
-      --values "$values_file" \
-      "$@"
-  else
-    $HELM --namespace $namespace \
-      install $name "$chart" \
-      --values "$values_file" \
-      "$@"
-  fi
+  $HELM \
+    --namespace $namespace \
+    upgrade --install "$name" "$chart" \
+    "$@"
 }
 
 install_minio() {
-  helm_install minio stable/minio vvp values-minio.yaml
+  helm_install minio stable/minio vvp \
+    --values values-minio.yaml
 }
 
 install_prometheus() {
-  helm_install prometheus stable/prometheus vvp values-prometheus.yaml
+  helm_install prometheus stable/prometheus vvp \
+    --values values-prometheus.yaml
 }
 
 install_grafana() {
-  helm_install grafana stable/grafana vvp values-grafana.yaml \
-      --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
+  helm_install grafana stable/grafana vvp \
+    --values values-grafana.yaml \
+    --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
 }
 
 install_elasticsearch() {
-  helm_install elasticsearch elastic/elasticsearch vvp values-elasticsearch.yaml
+  helm_install elasticsearch elastic/elasticsearch vvp \
+    --values values-elasticsearch.yaml
 }
 
 install_fluentd() {
-  helm_install fluentd kiwigrid/fluentd-elasticsearch vvp values-fluentd.yaml
+  helm_install fluentd kiwigrid/fluentd-elasticsearch vvp \
+    --values values-fluentd.yaml
 }
 
 install_kibana() {
-  helm_install kibana elastic/kibana vvp values-kibana.yaml
+  helm_install kibana elastic/kibana vvp \
+    --values values-kibana.yaml
+}
+
+helm_install_vvp() {
+  helm_install vvp "$VVP_CHART" vvp \
+    --values values-vvp.yaml \
+    "$@"
 }
 
 install_vvp() {
-  local edition install_metrics install_logging vvp_values_file helm_additional_parameters
+  local edition install_metrics install_logging helm_additional_parameters
 
   edition="$1"
   install_metrics="$2"
@@ -104,17 +92,17 @@ install_vvp() {
   helm_additional_parameters=
 
   if [ -n "$install_metrics" ]; then
-    vvp_values_file="values-vvp-with-metrics.yaml"
-  else
-    vvp_values_file="values-vvp.yaml"
+    helm_additional_parameters="${helm_additional_parameters} --values values-vvp-add-metrics.yaml"
   fi
 
   if [ -n "$install_logging" ]; then
-    helm_additional_parameters="--values values-vvp-add-logging.yaml"
+    helm_additional_parameters="${helm_additional_parameters} --values values-vvp-add-logging.yaml"
   fi
 
   if [ "$edition" == "enterprise" ]; then
-    helm_install_vvp --values values-license.yaml $helm_additional_parameters
+    helm_install_vvp \
+      --values values-license.yaml \
+      $helm_additional_parameters
   else
     # try installation once (aborts and displays license)
     helm_install_vvp $helm_additional_parameters
@@ -122,11 +110,10 @@ install_vvp() {
     read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (y/N) " yn
 
     case "$yn" in
-      "y")
-        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
-        ;;
-      "Y")
-        helm_install_vvp --set acceptCommunityEditionLicense=true $helm_additional_parameters
+      y|Y)
+        helm_install_vvp \
+          --set acceptCommunityEditionLicense=true \
+          $helm_additional_parameters
         ;;
       *)
         echo "Ververica Platform installation aborted."
@@ -134,10 +121,6 @@ install_vvp() {
         ;;
     esac
   fi
-}
-
-helm_install_vvp() {
-  helm_install vvp "$VVP_CHART" vvp "$vvp_values_file" "$@"
 }
 
 main() {
@@ -167,10 +150,6 @@ main() {
       usage
       exit 1
   esac
-
-  echo -n "> Detecting Helm version... "
-  HELM_VERSION="$(detect_helm_version)"
-  echo "detected Helm ${HELM_VERSION}."
 
   echo "> Creating Kubernetes namespaces..."
   create_namespaces

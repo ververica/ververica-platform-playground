@@ -1,0 +1,4 @@
+vvp:
+  ui:
+    linkTemplates:
+      metrics: http://localhost:3000/d/77Nra5XZz/flink-dashboard?var-deploymentId=<%= deploymentId %>
