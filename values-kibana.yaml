@@ -7,10 +7,10 @@ replicas: 1
 resources:
   requests:
     cpu: "100m"
-    memory: "256Mi"
+    memory: "500Mi"
   limits:
     cpu: "1000m"
-    memory: "256Mi"
+    memory: "1Gi"
 
 # Allows you to add any config files in /usr/share/kibana/config/
 # such as kibana.yml
