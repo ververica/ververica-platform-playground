@@ -10,7 +10,7 @@ resources:
     memory: "256Mi"
   limits:
     cpu: "1000m"
-    memory: "256Mi"
+    memory: "1Gi"
 
 # Allows you to add any config files in /usr/share/kibana/config/
 # such as kibana.yml
