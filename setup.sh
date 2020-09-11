@@ -31,6 +31,7 @@ add_helm_repos() {
   $HELM repo add kiwigrid https://kiwigrid.github.io
   $HELM repo add elastic https://helm.elastic.co
   $HELM repo add ververica https://charts.ververica.com
+  $HELM repo add minio https://helm.min.io/
 }
 
 helm_install() {
@@ -47,7 +48,7 @@ helm_install() {
 }
 
 install_minio() {
-  helm_install minio stable/minio vvp \
+  helm_install minio minio/minio vvp \
     --values values-minio.yaml
 }
 
