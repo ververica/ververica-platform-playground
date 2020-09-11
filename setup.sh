@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 HELM=${HELM:-helm}
-VVP_CHART=${VVP_CHART:-ververica/ververica-platform}
+VVP_CHART=${VVP_CHART:-}
 
 usage() {
   echo "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm."
@@ -26,13 +26,6 @@ create_namespaces() {
   kubectl get namespace vvp-jobs > /dev/null 2>&1 || kubectl create namespace vvp-jobs
 }
 
-add_helm_repos() {
-  $HELM repo add stable https://kubernetes-charts.storage.googleapis.com
-  $HELM repo add kiwigrid https://kiwigrid.github.io
-  $HELM repo add elastic https://helm.elastic.co
-  $HELM repo add ververica https://charts.ververica.com
-}
-
 helm_install() {
   local name chart namespace
 
@@ -47,40 +40,53 @@ helm_install() {
 }
 
 install_minio() {
-  helm_install minio stable/minio vvp \
+  helm_install minio minio vvp \
+    --repo https://helm.min.io \
     --values values-minio.yaml
 }
 
 install_prometheus() {
-  helm_install prometheus stable/prometheus vvp \
+  helm_install prometheus prometheus vvp \
+    --repo https://prometheus-community.github.io/helm-charts \
     --values values-prometheus.yaml
 }
 
 install_grafana() {
-  helm_install grafana stable/grafana vvp \
+  helm_install grafana grafana vvp \
+    --repo https://grafana.github.io/helm-charts \
     --values values-grafana.yaml \
     --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
 }
 
 install_elasticsearch() {
-  helm_install elasticsearch elastic/elasticsearch vvp \
+  helm_install elasticsearch elasticsearch vvp \
+    --repo https://helm.elastic.co \
     --values values-elasticsearch.yaml
 }
 
 install_fluentd() {
-  helm_install fluentd kiwigrid/fluentd-elasticsearch vvp \
+  helm_install fluentd fluentd-elasticsearch vvp \
+    --repo https://kiwigrid.github.io \
     --values values-fluentd.yaml
 }
 
 install_kibana() {
-  helm_install kibana elastic/kibana vvp \
+  helm_install kibana kibana vvp \
+    --repo https://helm.elastic.co \
     --values values-kibana.yaml
 }
 
 helm_install_vvp() {
-  helm_install vvp "$VVP_CHART" vvp \
-    --values values-vvp.yaml \
-    "$@"
+  if [ -n "$VVP_CHART" ];  then
+    helm_install vvp "$VVP_CHART" vvp \
+      --values values-vvp.yaml \
+      "$@"
+  else
+    helm_install vvp ververica-platform vvp \
+      --repo https://charts.ververica.com \
+      --values values-vvp.yaml \
+      "$@"
+  fi
 }
 
 install_vvp() {
@@ -153,9 +159,6 @@ main() {
 
   echo "> Creating Kubernetes namespaces..."
   create_namespaces
-
-  echo "> Adding Helm chart repositories..."
-  add_helm_repos
 
   echo "> Installing MinIO..."
   install_minio || :
