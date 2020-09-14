@@ -43,17 +43,18 @@ create_namespaces() {
 add_helm_repos() {
   $HELM repo add stable https://kubernetes-charts.storage.googleapis.com
   $HELM repo add ververica https://charts.ververica.com
+  $HELM repo add minio https://helm.min.io/
 }
 
 install_minio() {
   if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM install stable/minio \
+    $HELM install minio/minio \
       --name minio \
       --namespace vvp \
       --values values-minio.yaml
   else
     $HELM --namespace vvp \
-      install minio stable/minio \
+      install minio minio/minio \
       --values values-minio.yaml
   fi
 }
