@@ -54,3 +54,11 @@ blobStorageCredentials:
 rbac:
   additionalNamespaces:
   - vvp-jobs
+
+### Reduce gateway container memory requests.
+gateway:
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
