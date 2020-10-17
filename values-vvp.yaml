@@ -36,6 +36,15 @@ vvp:
                 prometheus.io/port: '9249'
                 prometheus.io/scrape: 'true'
 
+  ### Decrease the JobGraph translation thread pool size. This reduces our worst-case memory
+  ### requirements by reducing the number of translations that can happen in parallel.
+  ###
+  ### See also: https://docs.ververica.com/platform_operations/advanced/sql.html
+  sqlService:
+    pool:
+      coreSize: 1
+      maxSize: 1
+
 blobStorageCredentials:
   s3:
     accessKeyId: admin
@@ -45,3 +54,11 @@ blobStorageCredentials:
 rbac:
   additionalNamespaces:
   - vvp-jobs
+
+### Reduce gateway container memory requests.
+gateway:
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
