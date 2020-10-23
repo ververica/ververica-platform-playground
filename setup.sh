@@ -66,7 +66,7 @@ install_elasticsearch() {
 
 install_fluentd() {
   helm_install fluentd fluentd-elasticsearch vvp \
-    --repo https://kiwigrid.github.io \
+    --repo https://kokuwaio.github.io/helm-charts \
     --values values-fluentd.yaml
 }
 
