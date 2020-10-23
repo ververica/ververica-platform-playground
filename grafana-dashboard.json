@@ -890,7 +890,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Taskamanger Heap Memory Used",
+      "title": "Taskmanager Heap Memory Used",
       "tooltip": {
         "shared": true,
         "sort": 0,
