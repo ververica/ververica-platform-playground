@@ -6,6 +6,9 @@ set -o pipefail
 
 HELM=${HELM:-helm}
 
+VVP_NAMESPACE=${VVP_NAMESPACE:-vvp}
+JOBS_NAMESPACE=${JOBS_NAMESPACE:-"vvp-jobs"}
+
 helm_uninstall() {
   local release
   release="$1"
@@ -15,20 +18,20 @@ helm_uninstall() {
     return 1
   fi
 
-  $HELM --namespace vvp delete "$release" 2>/dev/null || :
+  $HELM --namespace "$VVP_NAMESPACE" delete "$release" 2>/dev/null || :
 }
 
 delete_namespaces() {
-  kubectl get namespace vvp > /dev/null 2>&1 && kubectl delete namespace vvp || :
-  kubectl get namespace vvp-jobs > /dev/null 2>&1 && kubectl delete namespace vvp-jobs || :
+  kubectl get namespace "$VVP_NAMESPACE" > /dev/null 2>&1 && kubectl delete namespace "$VVP_NAMESPACE" || :
+  kubectl get namespace "$JOBS_NAMESPACE" > /dev/null 2>&1 && kubectl delete namespace "$JOBS_NAMESPACE" || :
 }
 
 main() {
   local kube_context
   kube_context="$(kubectl config current-context)"
 
-  echo -n "This script will delete all playground components and the 'vvp' and "
-  echo "'vvp-jobs' namespaces from Kubernetes."
+  echo -n "This script will delete all playground components and the '$VVP_NAMESPACE' and "
+  echo "'$JOBS_NAMESPACE' namespaces from Kubernetes."
   echo
   echo "The currently configured Kubernetes context is: ${kube_context}"
   echo

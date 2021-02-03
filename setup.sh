@@ -7,6 +7,9 @@ set -o pipefail
 HELM=${HELM:-helm}
 VVP_CHART=${VVP_CHART:-}
 
+VVP_NAMESPACE=${VVP_NAMESPACE:-vvp}
+JOBS_NAMESPACE=${JOBS_NAMESPACE:-"vvp-jobs"}
+
 usage() {
   echo "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm."
   echo
@@ -21,9 +24,9 @@ usage() {
 }
 
 create_namespaces() {
-  # Create namespace `vvp` and `vvp-jobs` if they do not exist
-  kubectl get namespace vvp > /dev/null 2>&1 || kubectl create namespace vvp
-  kubectl get namespace vvp-jobs > /dev/null 2>&1 || kubectl create namespace vvp-jobs
+  # Create the vvp system and jobs namespaces if they do not exist
+  kubectl get namespace "$VVP_NAMESPACE" > /dev/null 2>&1 || kubectl create namespace "$VVP_NAMESPACE"
+  kubectl get namespace "$JOBS_NAMESPACE" > /dev/null 2>&1 || kubectl create namespace "$JOBS_NAMESPACE"
 }
 
 helm_install() {
@@ -34,55 +37,55 @@ helm_install() {
   namespace="$1"; shift
 
   $HELM \
-    --namespace $namespace \
+    --namespace "$namespace" \
     upgrade --install "$name" "$chart" \
     "$@"
 }
 
 install_minio() {
-  helm_install minio minio vvp \
+  helm_install minio minio "$VVP_NAMESPACE" \
     --repo https://helm.min.io \
     --values values-minio.yaml
 }
 
 install_prometheus() {
-  helm_install prometheus prometheus vvp \
+  helm_install prometheus prometheus "$VVP_NAMESPACE" \
     --repo https://prometheus-community.github.io/helm-charts \
     --values values-prometheus.yaml
 }
 
 install_grafana() {
-  helm_install grafana grafana vvp \
+  helm_install grafana grafana "$VVP_NAMESPACE" \
     --repo https://grafana.github.io/helm-charts \
     --values values-grafana.yaml \
     --set-file dashboards.default.flink-dashboard.json=grafana-dashboard.json
 }
 
 install_elasticsearch() {
-  helm_install elasticsearch elasticsearch vvp \
+  helm_install elasticsearch elasticsearch "$VVP_NAMESPACE" \
     --repo https://helm.elastic.co \
     --values values-elasticsearch.yaml
 }
 
 install_fluentd() {
-  helm_install fluentd fluentd-elasticsearch vvp \
+  helm_install fluentd fluentd-elasticsearch "$VVP_NAMESPACE" \
     --repo https://kokuwaio.github.io/helm-charts \
     --values values-fluentd.yaml
 }
 
 install_kibana() {
-  helm_install kibana kibana vvp \
+  helm_install kibana kibana "$VVP_NAMESPACE" \
     --repo https://helm.elastic.co \
     --values values-kibana.yaml
 }
 
 helm_install_vvp() {
   if [ -n "$VVP_CHART" ];  then
-    helm_install vvp "$VVP_CHART" vvp \
+    helm_install vvp "$VVP_CHART" "$VVP_NAMESPACE" \
       --values values-vvp.yaml \
       "$@"
   else
-    helm_install vvp ververica-platform vvp \
+    helm_install vvp ververica-platform "$VVP_NAMESPACE" \
       --repo https://charts.ververica.com \
       --values values-vvp.yaml \
       "$@"
@@ -186,8 +189,8 @@ main() {
   install_vvp "$edition" "$install_metrics" "$install_logging" || :
 
   echo "> Waiting for all Deployments and Pods to become ready..."
-  kubectl --namespace vvp wait --timeout=5m --for=condition=available deployments --all
-  kubectl --namespace vvp wait --timeout=5m --for=condition=ready pods --all
+  kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=available deployments --all
+  kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=ready pods --all
 }
 
 main "$@"
