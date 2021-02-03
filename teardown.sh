@@ -5,21 +5,6 @@ set -o nounset
 set -o pipefail
 
 HELM=${HELM:-helm}
-HELM_VERSION=
-
-detect_helm_version() {
-  local helm_version_string
-  helm_version_string="$($HELM version --short --client)"
-
-  if [[ "$helm_version_string" == *"v2"* ]]; then
-    echo 2
-  elif [[ "$helm_version_string" == *"v3"* ]]; then
-    echo 3
-  else
-    echo >&2 "Unsupported Helm version: ${helm_version_string}"
-    exit 1
-  fi
-}
 
 helm_uninstall() {
   local release
@@ -30,11 +15,7 @@ helm_uninstall() {
     return 1
   fi
 
-  if [ "$HELM_VERSION" -eq 2 ]; then
-    $HELM delete --purge "$release" 2>/dev/null || :
-  else
-    $HELM --namespace vvp delete "$release" 2>/dev/null || :
-  fi
+  $HELM --namespace vvp delete "$release" 2>/dev/null || :
 }
 
 delete_namespaces() {
@@ -64,10 +45,6 @@ main() {
       ;;
   esac
 
-  echo -n "> Detecting Helm version... "
-  HELM_VERSION="$(detect_helm_version)"
-  echo "detected Helm ${HELM_VERSION}."
-
   echo "> Uninstalling Helm applications..."
   helm_uninstall minio
   helm_uninstall vvp
@@ -76,7 +53,7 @@ main() {
   helm_uninstall elasticsearch
   helm_uninstall fluentd
   helm_uninstall kibana
- 
+
   echo "> Deleting Kubernetes namespaces..."
   delete_namespaces
 }
