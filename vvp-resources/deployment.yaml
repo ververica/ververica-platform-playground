@@ -4,7 +4,7 @@ metadata:
   name: TopSpeedWindowing
   namespace: default
 spec:
-  deploymentTargetId: <replace_me>
+  deploymentTargetName: vvp-jobs
   template:
     spec:
       artifact:
