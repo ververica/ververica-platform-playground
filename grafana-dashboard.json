@@ -936,7 +936,7 @@
     "list": [
       {
         "allValue": null,
-        "current": null,
+        "current": "",
         "datasource": "Prometheus",
         "definition": "label_values(deploymentId)",
         "hide": 0,
