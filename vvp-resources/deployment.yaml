@@ -1,7 +1,8 @@
 kind: Deployment
 apiVersion: v1
 metadata:
-  name: TopSpeedWindowing
+  displayName: "Top Speed Windowing"
+  name: top-speed-windowing
   namespace: default
 spec:
   deploymentTargetName: vvp-jobs
