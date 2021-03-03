@@ -175,6 +175,7 @@ main() {
   esac
 
   echo "> Setting up Ververica Platform Playground in namespace '$VVP_NAMESPACE' with jobs in namespace '$JOBS_NAMESPACE'"
+  echo "> The currently configured Kubernetes context is: $(kubectl config current-context)"
 
   if ! prompt "Continue?"; then
     echo "Ververica Platform setup aborted."
