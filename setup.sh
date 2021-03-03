@@ -83,11 +83,13 @@ helm_install_vvp() {
   if [ -n "$VVP_CHART" ];  then
     helm_install vvp "$VVP_CHART" "$VVP_NAMESPACE" \
       --values values-vvp.yaml \
+      --set rbac.additionalNamespaces="{$JOBS_NAMESPACE}" \
       "$@"
   else
     helm_install vvp ververica-platform "$VVP_NAMESPACE" \
       --repo https://charts.ververica.com \
       --values values-vvp.yaml \
+      --set rbac.additionalNamespaces="{$JOBS_NAMESPACE}" \
       "$@"
   fi
 }
@@ -159,6 +161,8 @@ main() {
       usage
       exit 1
   esac
+
+  echo "> Setting up VVP Playground for namespace $VVP_NAMESPACE with jobs in namespace $JOBS_NAMESPACE"
 
   echo "> Creating Kubernetes namespaces..."
   create_namespaces
