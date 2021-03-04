@@ -83,13 +83,31 @@ helm_install_vvp() {
   if [ -n "$VVP_CHART" ];  then
     helm_install vvp "$VVP_CHART" "$VVP_NAMESPACE" \
       --values values-vvp.yaml \
+      --set rbac.additionalNamespaces="{$JOBS_NAMESPACE}" \
+      --set vvp.blobStorage.s3.endpoint="http://minio.$VVP_NAMESPACE.svc:9000" \
       "$@"
   else
     helm_install vvp ververica-platform "$VVP_NAMESPACE" \
       --repo https://charts.ververica.com \
       --values values-vvp.yaml \
+      --set rbac.additionalNamespaces="{$JOBS_NAMESPACE}" \
+      --set vvp.blobStorage.s3.endpoint="http://minio.$VVP_NAMESPACE.svc:9000" \
       "$@"
   fi
+}
+
+prompt() {
+  local yn
+  read -r -p "$1 (y/N) " yn
+
+  case "$yn" in
+  y | Y)
+    return 0
+    ;;
+  *)
+    return 1
+    ;;
+  esac
 }
 
 install_vvp() {
@@ -116,19 +134,15 @@ install_vvp() {
     # try installation once (aborts and displays license)
     helm_install_vvp $helm_additional_parameters
 
-    read -r -p "Do you want to pass 'acceptCommunityEditionLicense=true'? (y/N) " yn
-
-    case "$yn" in
-      y|Y)
-        helm_install_vvp \
-          --set acceptCommunityEditionLicense=true \
-          $helm_additional_parameters
-        ;;
-      *)
-        echo "Ververica Platform installation aborted."
-        exit 1
-        ;;
-    esac
+    if prompt "Do you want to pass 'acceptCommunityEditionLicense=true'?"; then
+      echo "Installing..."
+      helm_install_vvp \
+        --set acceptCommunityEditionLicense=true \
+        $helm_additional_parameters
+    else
+      echo "Ververica Platform installation aborted."
+      exit 1
+    fi
   fi
 }
 
@@ -159,6 +173,14 @@ main() {
       usage
       exit 1
   esac
+
+  echo "> Setting up Ververica Platform Playground in namespace '$VVP_NAMESPACE' with jobs in namespace '$JOBS_NAMESPACE'"
+  echo "> The currently configured Kubernetes context is: $(kubectl config current-context)"
+
+  if ! prompt "Continue?"; then
+    echo "Ververica Platform setup aborted."
+    exit 1
+  fi
 
   echo "> Creating Kubernetes namespaces..."
   create_namespaces
@@ -191,6 +213,8 @@ main() {
   echo "> Waiting for all Deployments and Pods to become ready..."
   kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=available deployments --all
   kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=ready pods --all
+
+  echo "> Successfully set up the Ververica Platform Playground"
 }
 
 main "$@"
