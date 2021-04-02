@@ -15,7 +15,7 @@ datasources:
       type: prometheus
       access: proxy
       isDefault: true
-      url: http://prometheus-server.vvp.svc
+      url: http://vvp-metrics-prometheus.vvp.svc
 
 # Configure Grafana to load dashboards from the given directory
 dashboardProviders:

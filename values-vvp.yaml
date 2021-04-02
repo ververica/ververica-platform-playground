@@ -30,11 +30,6 @@ vvp:
             metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
             execution.checkpointing.interval: 10s
             execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
-          kubernetes:
-            pods:
-              annotations:
-                prometheus.io/port: '9249'
-                prometheus.io/scrape: 'true'
 
   ### Decrease the JobGraph translation thread pool size. This reduces our worst-case memory
   ### requirements by reducing the number of translations that can happen in parallel.

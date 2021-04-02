@@ -21,6 +21,12 @@ helm_uninstall() {
   $HELM --namespace "$VVP_NAMESPACE" delete "$release" 2>/dev/null || :
 }
 
+uninstall_prometheus_operator() {
+  helm_uninstall prometheus-operator
+  # Prometheus Operator CRDs must also be deleted (which will also delete the resources in prometheus-operator-resources)
+  kubectl get crds | grep monitoring.coreos.com  | tr -s " " | cut -d " " -f1 | xargs kubectl delete crd || :
+}
+
 delete_namespaces() {
   kubectl get namespace "$VVP_NAMESPACE" > /dev/null 2>&1 && kubectl delete namespace "$VVP_NAMESPACE" || :
   kubectl get namespace "$JOBS_NAMESPACE" > /dev/null 2>&1 && kubectl delete namespace "$JOBS_NAMESPACE" || :
@@ -51,7 +57,7 @@ main() {
   echo "> Uninstalling Helm applications..."
   helm_uninstall minio
   helm_uninstall vvp
-  helm_uninstall prometheus
+  uninstall_prometheus_operator
   helm_uninstall grafana
   helm_uninstall elasticsearch
   helm_uninstall fluentd
