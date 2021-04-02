@@ -48,10 +48,13 @@ install_minio() {
     --values values-minio.yaml
 }
 
-install_prometheus() {
-  helm_install prometheus prometheus "$VVP_NAMESPACE" \
+install_prometheus_operator() {
+  helm_install prometheus-operator kube-prometheus-stack "$VVP_NAMESPACE" \
     --repo https://prometheus-community.github.io/helm-charts \
-    --values values-prometheus.yaml
+    --values values-prometheus-operator.yaml \
+    --set prometheusOperator.namespaces.additional="{$JOBS_NAMESPACE}" \
+
+  kubectl --namespace "$JOBS_NAMESPACE" apply -f prometheus-operator-resources/service-monitor.yaml
 }
 
 install_grafana() {
@@ -185,18 +188,19 @@ main() {
   echo "> Creating Kubernetes namespaces..."
   create_namespaces
 
-  echo "> Installing MinIO..."
-  install_minio || :
-
   if [ -n "$install_metrics" ]; then
-    echo "> Installing Prometheus..."
-    install_prometheus || :
+    echo "> Installing metrics stack"
+
+    echo "> Installing Prometheus Operator, metrics Service, and ServiceMonitor..."
+    install_prometheus_operator || :
 
     echo "> Installing Grafana..."
     install_grafana || :
   fi
 
   if [ -n "$install_logging" ]; then
+    echo "> Installing logging stack"
+
     echo "> Installing Elasticsearch..."
     install_elasticsearch || :
 
@@ -206,6 +210,9 @@ main() {
     echo "> Installing Kibana..."
     install_kibana || :
   fi
+
+  echo "> Installing MinIO..."
+  install_minio || :
 
   echo "> Installing Ververica Platform..."
   install_vvp "$edition" "$install_metrics" "$install_logging" || :
