@@ -1,0 +1,84 @@
+# Disable all services except "server", since they aren't required
+# for the playground.
+
+defaultRules:
+  create: false
+
+alertmanager:
+  enabled: false
+
+# Grafana is managed separately
+grafana:
+  enabled: false
+
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+# Use an explicit fullname for nicer resource naming
+fullnameOverride: "vvp-metrics"
+
+prometheusOperator:
+  enabled: true
+
+  namespaces:
+     releaseNamespace: true
+
+  kubeletService:
+    enabled: false
+
+  serviceMonitor:
+    selfMonitor: false
+
+  resources:
+     limits:
+       cpu: 100m
+       memory: 100Mi
+     requests:
+       cpu: 100m
+       memory: 100Mi
+
+prometheus:
+  enabled: true
+
+  service:
+    port: 80
+
+  prometheusSpec:
+    scrapeInterval: "2s"
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi

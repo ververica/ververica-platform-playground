@@ -1,0 +1,46 @@
+# Expose metrics port on all Flink job containers
+# via a Service and the default Prometheus port
+# see: https://ci.apache.org/projects/flink/flink-docs-master/docs/deployment/metric_reporters/#prometheus
+# see: https://github.com/prometheus/prometheus/wiki/Default-port-allocations
+apiVersion: v1
+kind: Service
+metadata:
+  name: flink-metrics
+  labels:
+    system: ververica-platform
+    app: flink-job
+    component: metrics
+spec:
+  selector:
+    system: ververica-platform
+    app: flink-job
+  ports:
+    - name: metrics
+      port: 9249
+      targetPort: 9249
+      protocol: TCP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: flink-jobs
+spec:
+  selector:
+    # Match the above service by labels
+    matchLabels:
+      system: ververica-platform
+      app: flink-job
+      component: metrics
+  endpoints:
+    - port: metrics
+      interval: 2s
+  # Preserve data about each Flink pod
+  # to scope the scraped metrics
+  podTargetLabels:
+    - compontent
+    - deploymentId
+    - deploymentName
+    - jobId
+    - vvpNamespace
+
+
