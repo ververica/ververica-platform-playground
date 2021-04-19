@@ -1,6 +1,6 @@
 vvp:
 
-  ### Configure VVP to use a local SQLite Database
+  ### Configure VVP to use a local SQLite database
   persistence:
     type: local
 
