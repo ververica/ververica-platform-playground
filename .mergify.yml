@@ -1,0 +1,56 @@
+
+---
+pull_request_rules:
+  - name: Auto-Merge on Label
+    actions:
+      merge:
+        method: rebase
+        rebase_fallback: null
+        strict: true
+    conditions:
+      - label=ready-to-merge
+      - '#approved-reviews-by>=1'
+  - name: backport 2.4
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.4'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.4
+  - name: backport 2.3
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.3'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.3
+  - name: backport 2.2
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.2'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.2
+  - name: backport 2.1
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.1'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.1
