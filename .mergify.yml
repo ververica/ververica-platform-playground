@@ -10,6 +10,17 @@ pull_request_rules:
     conditions:
       - label=ready-to-merge
       - '#approved-reviews-by>=1'
+  - name: backport 2.5
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.5'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.5
   - name: backport 2.4
     actions:
       backport:
