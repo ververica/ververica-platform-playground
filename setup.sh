@@ -11,7 +11,6 @@ VVP_CHART_VERSION=${VVP_CHART_VERSION:-"5.1.0"}
 VVP_NAMESPACE=${VVP_NAMESPACE:-vvp}
 JOBS_NAMESPACE=${JOBS_NAMESPACE:-"vvp-jobs"}
 
-
 usage() {
   echo "This script installs Ververica Platform as well as its dependencies into a Kubernetes cluster using Helm."
   echo
