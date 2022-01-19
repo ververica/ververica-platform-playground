@@ -1,15 +1,29 @@
 
 ---
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=ci
+
 pull_request_rules:
   - name: Auto-Merge on Label
     actions:
-      merge:
+      queue:
         method: rebase
         rebase_fallback: null
-        strict: true
+        name: default
     conditions:
       - label=ready-to-merge
       - '#approved-reviews-by>=1'
+  - name: Auto-Merge Green Backports
+    actions:
+      queue:
+        method: rebase
+        rebase_fallback: null
+        name: default
+    conditions:
+      - label!=conflicts
+      - head~=mergify/bp
   - name: backport 2.5
     actions:
       backport:
