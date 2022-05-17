@@ -8,958 +8,4614 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1584373212570,
+  "id": 2,
+  "iteration": 1646307357698,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 13,
+      "id": 2,
       "panels": [],
-      "title": "General Health",
+      "title": "Health (per deployment job) ____________________ Deployment: id = $deploymentId, name = $deploymentName",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#d44a3a",
-        "rgba(237, 129, 40, 0.89)",
-        "#299c46"
-      ],
-      "datasource": "Prometheus",
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "description": "The time that the job has been running without interruption.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0
+              },
+              {
+                "color": "#299c46",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 6,
+        "h": 6,
+        "w": 3,
         "x": 0,
         "y": 1
       },
       "id": 4,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "options": {},
-      "pluginVersion": "6.6.2",
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false,
-        "ymax": null,
-        "ymin": null
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "flink_jobmanager_job_uptime{deploymentId=\"$deploymentId\"}",
-          "format": "time_series",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Job {{job_id}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "10000, 60000",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Uptime",
-      "transparent": true,
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 1
-      },
-      "id": 14,
-      "links": [],
       "options": {
         "colorMode": "value",
-        "fieldOptions": {
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "defaults": {
-            "mappings": [
-              {
-                "id": 0,
-                "op": "=",
-                "text": "N/A",
-                "type": 1,
-                "value": "null"
-              }
-            ],
-            "nullValueMode": "connected",
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 1
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [],
+          "fields": "",
           "values": false
         },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal"
+        "text": {},
+        "textMode": "auto"
       },
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
-          "expr": "round(increase(flink_jobmanager_job_numRestarts{deploymentId=\"$deploymentId\"}[$__range]))",
-          "instant": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "flink_jobmanager_job_uptime{deploymentId=\"$deploymentId\"}",
+          "interval": "",
+          "legendFormat": "Job {{job_id}}",
+          "measurement": "jobmanager_job_uptime",
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Current Uptime",
+      "type": "stat"
+    },
+    {
+      "description": "Information in restarts:\n\n* `Restarting Time`: The accumulated time it took to restart the job per interval (shown on left y-axis).\n* `#Restarts`: The number of full restarts per interval (shown on right y-axis).\n\n*Note:* If there are multiple jobs for this deployment, each job is shown separately. Alternatively, the first two (disabled) queries show aggregated results over all deployments.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "#Restarts.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 3,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "alias": "#Restarts",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "round(sum(increase(flink_jobmanager_job_restartingTime{deploymentId=\"$deploymentId\"}[$__rate_interval])) by (deploymentId))",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "Restarting Time",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Restarting Time",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "round(sum(increase(flink_jobmanager_job_numRestarts{deploymentId=\"$deploymentId\"}[$__rate_interval])) by (deploymentId))",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "#Restarts",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "label_replace(\n  increase(flink_jobmanager_job_restartingTime{deploymentId=\"$deploymentId\"}[$__rate_interval]),\n  \"job_id_short\", \"$1...$2\", \"job_id\", \"(\\\\w{6}).*(\\\\w{6})\"\n)\n",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Restarting Time({{job_id_short}})",
+          "refId": "C"
+        },
+        {
+          "alias": "Restarting Time",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "label_replace(\n  increase(flink_jobmanager_job_numRestarts{deploymentId=\"$deploymentId\"}[$__rate_interval]),\n  \"job_id_short\", \"$1...$2\", \"job_id\", \"(\\\\w{6}).*(\\\\w{6})\"\n)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "#Restarts({{job_id_short}})",
+          "refId": "D",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Restarts",
+      "type": "timeseries"
+    },
+    {
+      "description": "Failed Checkpoints within the chosen time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "#d44a3a",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 13,
+        "y": 1
+      },
+      "id": 8,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "round(increase(flink_jobmanager_job_numberOfFailedCheckpoints{deploymentId=\"$deploymentId\"}[$__range]))",
           "interval": "",
           "intervalFactor": 3,
           "legendFormat": "Job {{job_id}}",
-          "refId": "A"
+          "refId": "A",
+          "resultFormat": "time_series"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Job Restarts",
+      "title": "Failed Checkpoints",
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Failed"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Completed"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pending"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 12,
+        "h": 6,
+        "w": 8,
+        "x": 16,
         "y": 1
       },
-      "id": 9,
+      "id": 102,
       "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "increase(flink_jobmanager_job_numberOfCompletedCheckpoints{deploymentId=\"$deploymentId\"}[$__rate_interval])",
+          "interval": "",
+          "intervalFactor": 3,
+          "legendFormat": "Completed",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "increase(flink_jobmanager_job_numberOfInProgressCheckpoints{deploymentId=\"$deploymentId\"}[$__rate_interval])",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 3,
+          "legendFormat": "Pending",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "increase(flink_jobmanager_job_numberOfFailedCheckpoints{deploymentId=\"$deploymentId\"}[$__rate_interval])",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 3,
+          "legendFormat": "Failed",
+          "refId": "C",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Completed / Pending / Failed Checkpoints",
+      "type": "timeseries"
+    },
+    {
+      "description": "Completed Checkpoints within the chosen time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#F2495C",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0
+              },
+              {
+                "color": "#73BF69",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 13,
+        "y": 4
+      },
+      "id": 10,
+      "links": [],
+      "maxDataPoints": 100,
       "options": {
         "colorMode": "value",
-        "fieldOptions": {
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "defaults": {
-            "mappings": [
-              {
-                "id": 0,
-                "op": "=",
-                "text": "N/A",
-                "type": 1,
-                "value": "null"
-              }
-            ],
-            "nullValueMode": "connected",
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "bytes"
-          },
-          "overrides": [],
+          "fields": "",
           "values": false
         },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal"
+        "text": {},
+        "textMode": "auto"
       },
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
-          "expr": "flink_jobmanager_job_lastCheckpointSize{deploymentId=\"$deploymentId\"}",
-          "instant": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "round(increase(flink_jobmanager_job_numberOfCompletedCheckpoints{deploymentId=\"$deploymentId\"}[$__range]))",
+          "interval": "",
           "legendFormat": "Job {{job_id}}",
-          "refId": "A"
+          "measurement": "jobmanager_job_numberOfCompletedCheckpoints",
+          "refId": "A",
+          "resultFormat": "time_series"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Last Checkpoint Size",
+      "title": "Completed Checkpoints",
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
+      "collapsed": true,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 1
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
       },
-      "id": 18,
-      "links": [],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [
-              {
-                "id": 0,
-                "op": "=",
-                "text": "N/A",
-                "type": 1,
-                "value": "null"
-              }
-            ],
-            "nullValueMode": "connected",
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "ms"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
+      "id": 20,
+      "panels": [
         {
-          "expr": "flink_jobmanager_job_lastCheckpointDuration{deploymentId=\"$deploymentId\"}",
-          "instant": false,
-          "legendFormat": "Job {{job_id}}",
-          "refId": "A"
+          "description": "Shows the 99th percentile of the custom histogram metric `eventTimeLag`.\n\nThe shown value is actually the maximum of all operators' subtasks' 99th percentile over all their reported 99th percentile values in the time range.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 1,
+              "displayName": "",
+              "mappings": [],
+              "max": 3000,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#6ed0e0",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 520
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 600
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1000
+                  },
+                  {
+                    "color": "red",
+                    "value": 2000
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 0,
+            "y": 8
+          },
+          "id": 22,
+          "options": {
+            "displayMode": "lcd",
+            "orientation": "vertical",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.4.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(quantile_over_time(0.99, flink_taskmanager_job_task_operator_eventTimeLag{deploymentId=\"$deploymentId\", quantile=\"0.99\"}[$__range]))",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "max(all subtasks)",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "quantile_over_time(0.99, flink_taskmanager_job_task_operator_eventTimeLag{deploymentId=\"$deploymentId\", quantile=\"0.99\"}[$__range])",
+              "hide": true,
+              "interval": "",
+              "legendFormat": "{{subtask_index}}",
+              "refId": "B"
+            }
+          ],
+          "title": "Event Time Lag - 99% Quantile",
+          "type": "bargauge"
+        },
+        {
+          "description": "Shows for each operator the max of its subtasks' 99th percentile of the custom histogram metric `eventTimeLag`.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 3,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 10,
+            "x": 4,
+            "y": 8
+          },
+          "id": 101,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "alias": "$tag_subtask_index",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(flink_taskmanager_job_task_operator_eventTimeLag{deploymentId=\"$deploymentId\", quantile=\"0.99\"}) by (operator_name)",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{operator_name}}",
+              "measurement": "taskmanager_job_task_operator_eventTimeLag",
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Event Time Lag per Operator - 99% Quantile",
+          "type": "timeseries"
+        },
+        {
+          "description": "Shows for each subtask of the selected Task `$task` the 99th percentile of the custom histogram metric `eventTimeLag`.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 3,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 10,
+            "x": 14,
+            "y": 8
+          },
+          "id": 24,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "alias": "$tag_subtask_index",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(flink_taskmanager_job_task_operator_eventTimeLag{deploymentId=\"$deploymentId\", quantile=\"0.99\", task_name=\"$task\"}) by (subtask_index)",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{subtask_index}}",
+              "measurement": "taskmanager_job_task_operator_eventTimeLag",
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Event Time Lag per Subtask ($task) - 99% Quantile",
+          "type": "timeseries"
+        },
+        {
+          "description": "Shows the latest reported output watermarks for each subtask of the selected Task `$task`. Since each subtask reports the watermark independently, you will see different processing time timestamps for each reported watermark. The order of appearances is arbitrary.\n\n* `Invalid date` is likely caused by the watermark being `-infinity`.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "subtask_index"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Subtask"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 68
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Processing Time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 175
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Event Time (Watermark)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 175
+                  },
+                  {
+                    "id": "unit",
+                    "value": "time: YYYY-MM-DD HH:mm:ss.SSS"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "id": 26,
+          "interval": "",
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "operator_name"
+              },
+              {
+                "desc": false,
+                "displayName": "Subtask"
+              }
+            ]
+          },
+          "pluginVersion": "8.4.3",
+          "targets": [
+            {
+              "alias": "$tag_subtask_index",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": false,
+              "expr": "flink_taskmanager_job_task_operator_currentOutputWatermark{deploymentId=\"$deploymentId\", task_name=\"$task\"}",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A",
+              "resultFormat": "table"
+            }
+          ],
+          "title": "Output Watermark per Subtask ($task)",
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {}
+            },
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "Time",
+                    "Value",
+                    "subtask_index",
+                    "operator_name"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "operator_name"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {},
+                "indexByName": {
+                  "Time": 2,
+                  "Value": 3,
+                  "operator_name": 0,
+                  "subtask_index": 1
+                },
+                "renameByName": {
+                  "Time": "Processing Time",
+                  "Value": "Event Time (Watermark)",
+                  "operator_name": ""
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "description": "Shows the difference between the current processing time and the event time of all the subtasks of the selected Task `$task`.\n\n*Note:* the processing time only has second-accuracy!",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "displayName": "",
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#6ed0e0",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "id": 100,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.3.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "max(timestamp(flink_taskmanager_job_task_operator_currentOutputWatermark{deploymentId=\"$deploymentId\", task_name=\"$task\"})*1000) by (subtask_index) -\nmax(flink_taskmanager_job_task_operator_currentOutputWatermark{deploymentId=\"$deploymentId\", task_name=\"$task\"}) by (subtask_index)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{subtask_index}}",
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Processing Time - Event Time ($task)",
+          "transformations": [],
+          "type": "timeseries"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Last Checkpoint Duration",
-      "type": "stat"
+      "title": "Latency ____________________ Deployment: id = $deploymentId, name = $deploymentName",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 12,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Sum of all source subtasks' average output records per second in the time range.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "decimals": 2,
+              "displayName": "",
+              "mappings": [],
+              "max": 1500000,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "dark-orange",
+                    "value": 140000
+                  },
+                  {
+                    "color": "light-orange",
+                    "value": 180000
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 200000
+                  },
+                  {
+                    "color": "green",
+                    "value": 900000
+                  },
+                  {
+                    "color": "#6ED0E0",
+                    "value": 1000000
+                  }
+                ]
+              },
+              "unit": "ops"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 0,
+            "y": 9
+          },
+          "id": 14,
+          "links": [],
+          "options": {
+            "displayMode": "lcd",
+            "orientation": "vertical",
+            "reduceOptions": {
+              "calcs": [],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.4.3",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum(avg_over_time(flink_taskmanager_job_task_numRecordsOutPerSecond{deploymentId=\"$deploymentId\", task_name=~\".*Source.*\"}[$__range]))",
+              "interval": "",
+              "legendFormat": "",
+              "limit": "1",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Source Throughput",
+          "type": "bargauge"
+        },
+        {
+          "description": "For each task, sum of all its subtasks' output records per second.\n\nNote that a sink does not expose this metric and is not shown.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 3,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 10,
+            "x": 4,
+            "y": 9
+          },
+          "id": 16,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "alias": "$tag_task_name",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_job_task_numRecordsOutPerSecond{deploymentId=\"$deploymentId\", task_name!~\".*Sink.*\"}) by (task_name)",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{task_name}}",
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Records Out/Second per Task",
+          "type": "timeseries"
+        },
+        {
+          "description": "Detailed overview of the output records per second of all the subtasks of the selected Task `$task`.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 3,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 10,
+            "x": 14,
+            "y": 9
+          },
+          "id": 18,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "alias": "$tag_subtask_index",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_job_task_numRecordsOutPerSecond{deploymentId=\"$deploymentId\", task_name=\"$task\"}) by (deploymentId,subtask_index)",
+              "interval": "",
+              "legendFormat": "{{subtask_index}}",
+              "measurement": "taskmanager_job_task_numRecordsOutPerSecond",
+              "refId": "A",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Records Out/Second per Subtask ($task)",
+          "type": "timeseries"
+        }
+      ],
+      "title": "Throughput ____________________ Deployment: id = $deploymentId, name = $deploymentName",
+      "type": "row"
     },
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 9
       },
-      "id": 11,
+      "id": 28,
       "panels": [],
-      "title": "Throughput",
+      "title": "Checkpointing ____________________ Deployment: id = $deploymentId, name = $deploymentName",
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 11,
-        "w": 24,
+        "h": 7,
+        "w": 8,
         "x": 0,
         "y": 10
       },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
+      "id": 34,
       "options": {
-        "dataLinks": []
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.1.2",
       "targets": [
         {
-          "expr": "sum by (task_name) (flink_taskmanager_job_task_numRecordsOutPerSecond{deploymentId=\"$deploymentId\"})",
-          "legendFormat": "{{task_name}}",
-          "refId": "A"
+          "alias": "Checkpoint Duration",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_job_lastCheckpointDuration{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "interval": "",
+          "legendFormat": "Checkpoint Duration",
+          "refId": "A",
+          "resultFormat": "time_series"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Throughput",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Records/s",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Checkpoint Duration",
+      "type": "timeseries"
     },
     {
-      "collapsed": false,
-      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 10
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "alias": "Checkpoint Size",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_job_lastCheckpointSize{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "interval": "",
+          "legendFormat": "Checkpoint Size",
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Checkpoint Size",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 10
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "min(flink_taskmanager_job_task_checkpointAlignmentTime{deploymentId=\"$deploymentId\"} > 0)",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "min",
+          "queryType": "randomWalk",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "avg(flink_taskmanager_job_task_checkpointAlignmentTime{deploymentId=\"$deploymentId\"})",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "avg",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "max(flink_taskmanager_job_task_checkpointAlignmentTime{deploymentId=\"$deploymentId\"})",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "max",
+          "refId": "C"
+        }
+      ],
+      "title": "Checkpoint Alignment Time",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 17
       },
-      "id": 17,
-      "panels": [],
-      "title": "Checkpointing",
+      "id": 72,
+      "panels": [
+        {
+          "description": "Estimate of the amount of live data in bytes (usually smaller than `.sst` files size due to space amplification).\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 18
+          },
+          "id": 73,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_estimate_live_data_size\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Live Data",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the number of background errors in RocksDB.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 18
+          },
+          "id": 77,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_background_errors\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Background Errors",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the current actual delayed write rate. 0 means no delay.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 18
+          },
+          "id": 94,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_actual_delayed_write_rate\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Delayed Write Rate",
+          "type": "timeseries"
+        },
+        {
+          "description": "Estimated total number of bytes compaction needs to rewrite to get all levels down to under target size. Not valid for other compactions than level-based.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 25
+          },
+          "id": 83,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_estimate_pending_compaction_bytes\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Pending Compaction Bytes",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the number of currently running compactions.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 25
+          },
+          "id": 76,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_running_compactions\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Running Compactions",
+          "type": "timeseries"
+        },
+        {
+          "description": "Track pending compactions in RocksDB. Returns `1` if a compaction is pending, `0` otherwise.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 25
+          },
+          "id": 92,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_compaction_pending\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Pending Compactions",
+          "type": "timeseries"
+        },
+        {
+          "description": "Track whether write has been stopped in RocksDB. Returns `1` if write has been stopped, `0` otherwise.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 32
+          },
+          "id": 85,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_is_write_stopped\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Write Stopped",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the number of currently running flushes.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 32
+          },
+          "id": 81,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_running_flushes\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Running Flushes",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the number of pending memtable flushes in RocksDB.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 32
+          },
+          "id": 93,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_mem_table_flush_pending\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Pending Flushes",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the memory size for the entries residing in block cache.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 39
+          },
+          "id": 79,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_block_cache_usage\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Block Cache Usage",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the approximate size of the active, unflushed immutable, and pinned immutable memtables in bytes.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 39
+          },
+          "id": 80,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_size_all_mem_tables\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): MemTable Size",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor number of live versions. Version is an internal data structure. See RocksDB file `version_set.h` for details. More live versions often mean more `.sst` files are held from being deleted by iterators or unfinished compactions.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 39
+          },
+          "id": 90,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_live_versions\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Live Versions",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the memory size for the entries being pinned in block cache.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 46
+          },
+          "id": 78,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_block_cache_pinned_usage\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Block Cache Pinned Usage",
+          "type": "timeseries"
+        },
+        {
+          "description": "Estimate the memory used for reading SST tables, excluding memory used in block cache (e.g., filter and index blocks) in bytes.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 46
+          },
+          "id": 75,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_estimate_table_readers_mem\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Readers Memory Used",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the number of unreleased snapshots of the database.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 46
+          },
+          "id": 89,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_snapshots\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Unreleased Snapshots",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the total number of entries in the active memtable.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 53
+          },
+          "id": 86,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_entries_active_mem_table\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Num Entries (active memtable)",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the total number of delete entries in the active memtable.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 53
+          },
+          "id": 96,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_deletes_active_mem_table\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Num Deletes (active memtable)",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the total number of entries in the unflushed immutable memtables.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 60
+          },
+          "id": 95,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_entries_imm_mem_tables\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Num Entries (immutable memtables)",
+          "type": "timeseries"
+        },
+        {
+          "description": "Monitor the total number of delete entries in the unflushed immutable memtables.\n\nThe values shown here are the sum of all matching operators' state metrics per Task Manager.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 60
+          },
+          "id": 97,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum({__name__=~\"flink_taskmanager_job_task_operator_${rocksdb_state}_rocksdb_num_deletes_imm_mem_tables\",deploymentId=\"$deploymentId\"}) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{tm_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RocksDB($rocksdb_state): Num Deletes (immutable memtables)",
+          "type": "timeseries"
+        }
+      ],
+      "title": "RocksDB ____________________ Deployment: id = $deploymentId, name = $deploymentName, state names = $rocksdb_state",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
-        "h": 8,
-        "w": 6,
+        "h": 1,
+        "w": 24,
         "x": 0,
-        "y": 22
+        "y": 18
       },
-      "id": 19,
-      "links": [],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [
-              {
-                "id": 0,
-                "op": "=",
-                "text": "N/A",
-                "type": 1,
-                "value": "null"
-              }
-            ],
-            "nullValueMode": "connected",
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 1
-                }
-              ]
-            },
-            "unit": "none"
+      "id": 32,
+      "panels": [],
+      "title": "TM Resources ____________________ Deployment: id = $deploymentId, name = $deploymentName",
+      "type": "row"
+    },
+    {
+      "description": "The CPU use of each of the TaskManagers:\n* Container CPU in % of total assigned CPU shares",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
           },
-          "overrides": [],
-          "values": false
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
         },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal"
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container CPU usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
       },
-      "pluginVersion": "6.6.2",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 67,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
       "targets": [
         {
-          "expr": "round(increase(flink_jobmanager_job_numberOfFailedCheckpoints{deploymentId=\"$deploymentId\"}[$__range]))",
-          "instant": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(\n  0*max({__name__=\"flink_taskmanager_Status_JVM_CPU_Load\",deploymentId=\"$deploymentId\"}) by (pod,tm_id)\n  +\n  on(pod)\n  group_left()\n  (\n    rate(container_cpu_usage_seconds_total{pod=~\"job-.*-taskmanager-.*\",container=~\"flink-taskmanager\"}[5m]) * 1024 * 100\n    /\n    on(pod,id)\n    container_spec_cpu_shares{pod=~\"job-.*-taskmanager-.*\",container=~\"flink-taskmanager\"}\n  )\n) by (deploymentId,tm_id)",
+          "hide": false,
           "interval": "",
-          "intervalFactor": 3,
-          "legendFormat": "Job {{job_id}}",
+          "legendFormat": "{{tm_id}}",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Failed Checkpoints",
-      "type": "stat"
+      "title": "Task Manager CPU Used (all TMs)",
+      "type": "timeseries"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 22
-      },
-      "id": 20,
-      "links": [],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [
-              {
-                "id": 0,
-                "op": "=",
-                "text": "N/A",
-                "type": 1,
-                "value": "null"
-              }
-            ],
-            "nullValueMode": "connected",
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": null
-                },
-                {
-                  "color": "green",
-                  "value": 1
-                }
-              ]
-            },
-            "unit": "none"
+      "description": "Shows, per TM, the ratio of memory used vs. the configured limit (`container_memory_working_set_bytes / container_spec_memory_limit_bytes`).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
           },
-          "overrides": [],
-          "values": false
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
         },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal"
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container CPU usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
       },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "round(increase(flink_jobmanager_job_numberOfCompletedCheckpoints{deploymentId=\"$deploymentId\"}[$__range]))",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 3,
-          "legendFormat": "Job {{job_id}}",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Successfull Checkpoints",
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 6,
+        "w": 12,
         "x": 12,
-        "y": 22
+        "y": 19
       },
-      "hiddenSeries": false,
-      "id": 21,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
+      "id": 69,
       "options": {
-        "dataLinks": []
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.1.2",
       "targets": [
         {
-          "expr": "flink_jobmanager_job_lastCheckpointSize{deploymentId=\"$deploymentId\"}",
-          "instant": false,
-          "legendFormat": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(\n  0*max({__name__=\"flink_taskmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\"}) by (pod,tm_id)\n  +\n  on(pod)\n  group_left()\n  sum (container_memory_working_set_bytes{name=\"\"}) by (pod)\n) by (tm_id)\n/\nsum(\n  0*max({__name__=\"flink_taskmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\"}) by (pod,tm_id)\n  +\n  on(pod)\n  group_left()\n  sum (container_spec_memory_limit_bytes{name=\"\"}) by (pod)\n) by (tm_id)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{tm_id}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Last Checkpoint Size",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Task Manager Memory Used (all TMs)",
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 22
-      },
-      "hiddenSeries": false,
-      "id": 15,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "flink_jobmanager_job_lastCheckpointDuration{deploymentId=\"$deploymentId\"}",
-          "instant": false,
-          "legendFormat": "Job {{job_id}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Last Checkpoint Duration",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": "Prometheus",
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 27
       },
-      "id": 23,
-      "panels": [],
-      "title": "JVM Resources",
+      "id": 99,
+      "panels": [
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "normal"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": ".*Container limit.*"
+                },
+                "properties": [
+                  {
+                    "id": "custom.stacking",
+                    "value": {
+                      "group": "A",
+                      "mode": "none"
+                    }
+                  },
+                  {
+                    "id": "custom.fillOpacity",
+                    "value": 0
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": ".*Container working memory set.*"
+                },
+                "properties": [
+                  {
+                    "id": "custom.stacking",
+                    "value": {
+                      "group": "A",
+                      "mode": "none"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "purple",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": ".*Heap Committed.*"
+                },
+                "properties": [
+                  {
+                    "id": "custom.stacking",
+                    "value": {
+                      "group": "A",
+                      "mode": "none"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 28
+          },
+          "id": 68,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.1.2",
+          "targets": [
+            {
+              "alias": "Direct Used",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_Status_JVM_Memory_Direct_MemoryUsed{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (tm_id)",
+              "interval": "",
+              "legendFormat": "Direct Used@{{tm_id}}",
+              "refId": "C",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Non-Heap Used",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_Status_JVM_Memory_NonHeap_Committed{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (tm_id)",
+              "interval": "",
+              "legendFormat": "Non-Heap Used@{{tm_id}}",
+              "refId": "D",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Heap Used",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_Status_JVM_Memory_Heap_Used{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (tm_id)",
+              "interval": "",
+              "legendFormat": "Heap Used@{{tm_id}}",
+              "refId": "A",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Heap Committed",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(flink_taskmanager_Status_JVM_Memory_Heap_Committed{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (tm_id)",
+              "interval": "",
+              "legendFormat": "Heap Committed@{{tm_id}}",
+              "refId": "B",
+              "resultFormat": "time_series"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(\n  0*max({__name__=\"flink_taskmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (pod,tm_id)\n  +\n  on(pod)\n  group_left()\n  sum (container_memory_working_set_bytes{name=\"\"}) by (pod)\n) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "Container working memory set@{{tm_id}}",
+              "refId": "E"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "sum(\n  0*max({__name__=\"flink_taskmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}) by (pod,tm_id)\n  +\n  on(pod)\n  group_left()\n  sum (container_spec_memory_limit_bytes{name=\"\"}) by (pod)\n) by (tm_id)",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "Container limit@{{tm_id}}",
+              "refId": "F"
+            }
+          ],
+          "title": "Task Manager Memory Details @ $tm_id",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 28
+          },
+          "id": 46,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.3.2",
+          "targets": [
+            {
+              "alias": "MarkSweepCompact",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "idelta(flink_taskmanager_Status_JVM_GarbageCollector_MarkSweepCompact_Time{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}[5m])",
+              "interval": "",
+              "legendFormat": "MarkSweepCompact@{{tm_id}}",
+              "refId": "A",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Copy",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "idelta(flink_taskmanager_Status_JVM_GarbageCollector_Copy_Time{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}[5m])",
+              "interval": "",
+              "legendFormat": "Copy@{{tm_id}}",
+              "refId": "B",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Copy",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "idelta(flink_taskmanager_Status_JVM_GarbageCollector_PS_Scavenge_Time{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}[5m])",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "PS_Scavenge@{{tm_id}}",
+              "refId": "C",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Copy",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "exemplar": true,
+              "expr": "idelta(flink_taskmanager_Status_JVM_GarbageCollector_PS_MarkSweep_Time{deploymentId=\"$deploymentId\",tm_id=~\"$tm_id\"}[5m])",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "PS_MarkSweep@{{tm_id}}",
+              "refId": "D",
+              "resultFormat": "time_series"
+            }
+          ],
+          "title": "Task Manager GC @ $tm_id",
+          "type": "timeseries"
+        }
+      ],
+      "title": "TM Memory Details ____________________ Deployment: id = $deploymentId, name = $deploymentName, TM: $tm_id",
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "gridPos": {
-        "h": 8,
-        "w": 11,
+        "h": 1,
+        "w": 24,
         "x": 0,
-        "y": 31
+        "y": 28
       },
-      "hiddenSeries": false,
-      "id": 26,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "flink_jobmanager_Status_JVM_Memory_Heap_Used{deploymentId=\"$deploymentId\"}",
-          "legendFormat": "{{kubernetes_pod_name}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Flink Master Heap Memory Used",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "decbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "id": 30,
+      "panels": [],
+      "title": "JM Resources ____________________ Deployment: id = $deploymentId, name = $deploymentName",
+      "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
+      "description": "The CPU use of the JobManager:\n* Container CPU in % of total assigned CPU shares\n* JVM Load (disabled by default): 1.0 = 1 CPU core",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container CPU usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 8,
-        "w": 13,
-        "x": 11,
-        "y": 31
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 29
       },
-      "hiddenSeries": false,
-      "id": 25,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
+      "id": 66,
       "options": {
-        "dataLinks": []
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "8.1.2",
       "targets": [
         {
-          "expr": "flink_taskmanager_Status_JVM_Memory_Heap_Used{deploymentId=\"$deploymentId\"}",
-          "legendFormat": "{{kubernetes_pod_name}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Taskmanager Heap Memory Used",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "decbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "alias": "Load",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_Status_JVM_CPU_Load{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "JVM Load",
+          "refId": "A",
+          "resultFormat": "time_series"
         },
         {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(\n  0*max({__name__=\"flink_jobmanager_Status_JVM_CPU_Load\",deploymentId=\"$deploymentId\"}) by (pod)\n  +\n  on(pod)\n  group_right()\n  (\n    rate(container_cpu_usage_seconds_total{pod=~\"job-.*-jobmanager-.*\",container=~\"flink-jobmanager\"}[5m]) * 1024 * 100\n    /\n    on(pod,id)\n    container_spec_cpu_shares{pod=~\"job-.*-jobmanager-.*\",container=~\"flink-jobmanager\"}\n  )\n) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Container CPU usage",
+          "refId": "B"
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "JobManager CPU Used",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Heap Committed"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": false,
+                  "mode": "none"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container working memory set"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container limit"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 29
+      },
+      "id": 45,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "alias": "Direct Used",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_Status_JVM_Memory_Direct_MemoryUsed{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Direct Used",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Non-Heap Used",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_Status_JVM_Memory_NonHeap_Committed{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Non-Heap Used",
+          "refId": "D",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Heap Used",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_Status_JVM_Memory_Heap_Used{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Heap Used",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Heap Committed",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(flink_jobmanager_Status_JVM_Memory_Heap_Committed{deploymentId=\"$deploymentId\"}) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Heap Committed",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(\n  0*max({__name__=\"flink_jobmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\"}) by (pod)\n  +\n  on(pod)\n  group_right()\n  sum (container_memory_working_set_bytes{name=\"\"}) by (pod)\n) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Container working memory set",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(\n  0*max({__name__=\"flink_jobmanager_Status_JVM_Memory_Heap_Committed\",deploymentId=\"$deploymentId\"}) by (pod)\n  +\n  on(pod)\n  group_right()\n  sum (container_spec_memory_limit_bytes{name=\"\"}) by (pod)\n) by (deploymentId)",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Container limit",
+          "refId": "F"
+        }
+      ],
+      "title": "Job Manager Memory",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 29
+      },
+      "id": 70,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "alias": "MarkSweepCompact",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "idelta(flink_jobmanager_Status_JVM_GarbageCollector_MarkSweepCompact_Time{deploymentId=\"$deploymentId\"}[5m])",
+          "interval": "",
+          "legendFormat": "MarkSweepCompact",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Copy",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "idelta(flink_jobmanager_Status_JVM_GarbageCollector_Copy_Time{deploymentId=\"$deploymentId\"}[5m])",
+          "interval": "",
+          "legendFormat": "Copy",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Copy",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "idelta(flink_jobmanager_Status_JVM_GarbageCollector_PS_Scavenge_Time{deploymentId=\"$deploymentId\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "PS_Scavenge",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Copy",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "idelta(flink_jobmanager_Status_JVM_GarbageCollector_PS_MarkSweep_Time{deploymentId=\"$deploymentId\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "PS_MarkSweep",
+          "refId": "D",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Job Manager GC",
+      "type": "timeseries"
     }
   ],
-  "refresh": "5s",
-  "schemaVersion": 22,
+  "refresh": "10s",
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": "",
-        "datasource": "Prometheus",
-        "definition": "label_values(deploymentId)",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values({__name__=~\"flink_(job|task)manager_Status_JVM_CPU_Load\"},deploymentId)",
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Deployment ID",
         "multi": false,
         "name": "deploymentId",
         "options": [],
-        "query": "label_values(deploymentId)",
-        "refresh": 0,
+        "query": {
+          "query": "label_values({__name__=~\"flink_(job|task)manager_Status_JVM_CPU_Load\"},deploymentId)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "definition": "label_values({__name__=~\"flink_(job|task)manager_Status_JVM_CPU_Load\",deploymentId=~\"$deploymentId\"}, deploymentName)",
+        "description": "Deployment Name of the selected Deployment ID",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Deployment Name",
+        "multi": false,
+        "name": "deploymentName",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=~\"flink_(job|task)manager_Status_JVM_CPU_Load\",deploymentId=~\"$deploymentId\"}, deploymentName)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values({__name__=\"flink_taskmanager_job_task_numRecordsOutPerSecond\",deploymentId=\"$deploymentId\"}, task_name)",
+        "description": "Select a specific Flink Task to get more details about (task names depend on operator names given in your Flink job).",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Task",
+        "multi": false,
+        "name": "task",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=\"flink_taskmanager_job_task_numRecordsOutPerSecond\",deploymentId=\"$deploymentId\"}, task_name)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values({__name__=~\"flink_taskmanager_job_task_operator_.*_rocksdb_.*\",deploymentId=\"$deploymentId\"}, __name__)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "RocksDB State Name",
+        "multi": true,
+        "name": "rocksdb_state",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=~\"flink_taskmanager_job_task_operator_.*_rocksdb_.*\",deploymentId=\"$deploymentId\"}, __name__)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/flink_taskmanager_job_task_operator_(.*)_rocksdb_.*/",
+        "skipUrlSync": false,
+        "sort": 5,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "definition": "label_values({__name__=\"flink_taskmanager_job_task_numRecordsOutPerSecond\",deploymentId=\"$deploymentId\", component=\"taskmanager\"}, tm_id)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "TM",
+        "multi": false,
+        "name": "tm_id",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=\"flink_taskmanager_job_task_numRecordsOutPerSecond\",deploymentId=\"$deploymentId\", component=\"taskmanager\"}, tm_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-2m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -977,7 +4633,8 @@
     ]
   },
   "timezone": "",
-  "title": "Simple Flink Dashboard",
-  "uid": "77Nra5XZz",
-  "version": 1
+  "title": "Flink Monitoring Prometheus",
+  "uid": "6x9EvVBnz",
+  "version": 1,
+  "weekStart": ""
 }
