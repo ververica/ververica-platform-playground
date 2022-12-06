@@ -226,7 +226,7 @@ main() {
   if [ "$edition" == "community" ]; then
     echo ""
     echo "> Waiting for Installation Token...";
-    kubectl --namespace "$VVP_NAMESPACE" get secret installation-token --template={{.data.token}} && echo ""
+    kubectl --namespace "$VVP_NAMESPACE" get secret installation-token --template={{.data.token}} | base64 -d && echo ""
     if [ $? -eq 0 ]; then
       echo "> Successfully installed 14 days trial. To receive full Community License please register the token in https://www.ververica.com"
     else
