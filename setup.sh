@@ -67,19 +67,22 @@ install_grafana() {
 install_elasticsearch() {
   helm_install elasticsearch elasticsearch "$VVP_NAMESPACE" \
     --repo https://helm.elastic.co \
-    --values values-elasticsearch.yaml
+    --values values-elasticsearch.yaml \
+    --version 7.9.2
 }
 
 install_fluentd() {
   helm_install fluentd fluentd-elasticsearch "$VVP_NAMESPACE" \
     --repo https://kokuwaio.github.io/helm-charts \
-    --values values-fluentd.yaml
+    --values values-fluentd.yaml \
+    --version 13.2.0
 }
 
 install_kibana() {
   helm_install kibana kibana "$VVP_NAMESPACE" \
     --repo https://helm.elastic.co \
-    --values values-kibana.yaml
+    --values values-kibana.yaml \
+    --version 7.9.2
 }
 
 helm_install_vvp() {
