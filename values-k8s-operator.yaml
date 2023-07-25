@@ -1,0 +1,8 @@
+# Enabled only for Enterprise Edition
+vvp:
+  k8sOperator:
+    enabled: true
+    identity: "vvp-playground-k8s-operator-identity"
+    # namespaces which are watched for deployed vvp custom resources
+    watchedNamespaces:
+      - "vvp-jobs"

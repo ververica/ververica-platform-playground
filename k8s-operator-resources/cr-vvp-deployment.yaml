@@ -1,0 +1,24 @@
+apiVersion: ververica.platform/v1
+kind: VvpDeployment
+metadata:
+  name: cr-vvp-deployment
+spec:
+  syncingMode: PATCH
+  deployment:
+    userMetadata:
+      name: cr-vvp-deployment-name
+      namespace: default
+    spec:
+      state: RUNNING
+      deploymentTargetName: vvp-jobs
+      maxJobCreationAttempts: 3
+      template:
+        spec:
+          artifact:
+            jarUri: file:///flink/examples/streaming/TopSpeedWindowing.jar
+            kind: JAR
+  initFields:
+    userMetadata:
+      displayName: cr-vvp-deployment-display-name
+    spec:
+      maxSavepointCreationAttempts: 3
