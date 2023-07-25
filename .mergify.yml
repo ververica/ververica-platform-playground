@@ -24,6 +24,17 @@ pull_request_rules:
     conditions:
       - label!=conflicts
       - head~=mergify/bp
+  - name: backport 2.11
+    actions:
+      backport:
+        ignore_conflicts: true
+        branches:
+          - 'release-2.11'
+        assignees:
+          - '{{author}}'
+    conditions:
+      - merged
+      - label=release-2.11
   - name: backport 2.10
     actions:
       backport:
