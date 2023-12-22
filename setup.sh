@@ -44,7 +44,7 @@ helm_install() {
 
 install_minio() {
   helm_install minio minio "$VVP_NAMESPACE" \
-    --repo https://helm.min.io \
+    --repo https://charts.helm.sh/stable \
     --values values-minio.yaml
 }
 
