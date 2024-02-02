@@ -220,9 +220,23 @@ main() {
   echo "> Installing Ververica Platform..."
   install_vvp "$edition" "$install_metrics" "$install_logging" || :
 
+  echo ""
   echo "> Waiting for all Deployments and Pods to become ready..."
   kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=available deployments --all
   kubectl --namespace "$VVP_NAMESPACE" wait --timeout=5m --for=condition=ready pods --all
+
+  # generate token for community
+  if [ "$edition" == "community" ]; then
+    echo ""
+    echo "> Waiting for Installation Token...";
+    kubectl --namespace "$VVP_NAMESPACE" get secret installation-token --template={{.data.token}} | base64 -d && echo ""
+    if [ $? -eq 0 ]; then
+      echo "> Successfully installed 14 days trial. To receive full Community License please register the token in https://www.ververica.com"
+    else
+      echo "> Token not find. Please reinstall Community Edition with defaults"
+      exit 0
+    fi
+  fi
 
   echo "> Successfully set up the Ververica Platform Playground"
 }
