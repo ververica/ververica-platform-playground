@@ -13,5 +13,5 @@ spec:
         kind: JAR
         flinkVersion: '1.18'
         jarUri: >-
-          https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming_2.12/1.18.0/flink-examples-streaming_2.12-1.18.0-TopSpeedWindowing.jar
+          https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming/1.18.1/flink-examples-streaming-1.18.1-WindowJoin.jar
 
